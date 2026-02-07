@@ -56,14 +56,10 @@ function orderInstagram() {
     const instagramProfile = "https://www.instagram.com/layercat3d";
     window.open(instagramProfile, "_blank");
 
-    // İsteğe bağlı: Sepet bilgilerini kullanıcıya kopyalatmak için alert
-    let message = "Sipariş vermek için Instagram profil sayfası açıldı.\n\nSipariş detaylarınızı aşağıya kopyalayabilirsiniz:\n\n";
-    cart.forEach(item => {
-        message += `- ${item.quantity} adet ${item.product} (${item.code})\n  Renk: ${item.color}\n  Yazı: ${item.text}\n\n`;
-    });
-    alert(message);
+  
 }
 
 }
+
 
 
