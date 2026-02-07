@@ -21,7 +21,7 @@
     <div class="product-grid">
 
         <div class="product">
-            <img src="images/anahtarlik-01.JPG" alt="Klasik Anahtarlık">
+            <img src="images/anahtarlik-01.jpg" alt="Klasik Anahtarlık">
             <h4>Klasik Anahtarlık</h4>
             <p class="product-code"><strong>LC-01</strong></p>
 
@@ -42,8 +42,8 @@
         </div>
 
         <div class="product">
-            <img src="images/anahtarlik-02.jpg" alt="Dino Anahtarlık">
-            <h4>Dino Anahtarlık</h4>
+            <img src="images/anahtarlik-02.jpg" alt="Minimal Anahtarlık">
+            <h4>Minimal Anahtarlık</h4>
             <p class="product-code"><strong>LC-02</strong></p>
 
             <label>Renk</label>
@@ -59,31 +59,9 @@
             <label>Adet</label>
             <input type="number" id="qty-lc02" value="1" min="1">
 
-            <button onclick="addToCart('Dino Anahtarlık','LC-02','color-lc02','qty-lc02','text-lc02')">Sepete Ekle</button>
+            <button onclick="addToCart('Minimal Anahtarlık','LC-02','color-lc02','qty-lc02','text-lc02')">Sepete Ekle</button>
         </div>
 
- <div class="product">
-            <img src="images/anahtarlik-03.JPG" alt="Dino2 Anahtarlık">
-            <h4>Dino2 Anahtarlık</h4>
-            <p class="product-code"><strong>LC-03</strong></p>
-
-            <label>Renk</label>
-            <select id="color-lc03">
-                <option>Siyah</option>
-                <option>Beyaz</option>
-                <option>Gri</option>
-            </select>
-
-            <label>İsim / Yazı</label>
-            <input type="text" id="text-lc03" placeholder="Örn: Elif">
-
-            <label>Adet</label>
-            <input type="number" id="qty-lc03" value="1" min="1">
-
-            <button onclick="addToCart('Dino2 Anahtarlık','LC-03','color-lc03','qty-lc03','text-lc03')">Sepete Ekle</button>
-        </div>
-
-        <!-- İstediğin kadar ürün ekleyebilirsin -->
     </div>
 
     <!-- EV DEKORASYONU -->
@@ -139,11 +117,9 @@
 <section id="cart">
     <h2>Sepet</h2>
     <ul id="cart-items"></ul>
-    <button class="order-btn" onclick="orderInstagram()">Instagram’dan Sipariş Ver</button>
+    <button class="order-btn" onclick="orderWhatsApp()">WhatsApp’tan Sipariş Ver</button>
 </section>
 
 <script src="script.js"></script>
 </body>
 </html>
-
-
