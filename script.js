@@ -46,21 +46,24 @@ function removeItem(index) {
 }
 
 function orderInstagram() {
+    // Sepet boşsa uyar
     if (cart.length === 0) {
         alert("Sepet boş!");
         return;
     }
 
-    let message = "Merhaba 👋\n\nSipariş vermek istiyorum:\n\n";
+    // Instagram profil sayfasını aç
+    const instagramProfile = "https://www.instagram.com/layercat3d";
+    window.open(instagramProfile, "_blank");
+
+    // İsteğe bağlı: Sepet bilgilerini kullanıcıya kopyalatmak için alert
+    let message = "Sipariş vermek için Instagram profil sayfası açıldı.\n\nSipariş detaylarınızı aşağıya kopyalayabilirsiniz:\n\n";
     cart.forEach(item => {
         message += `- ${item.quantity} adet ${item.product} (${item.code})\n  Renk: ${item.color}\n  Yazı: ${item.text}\n\n`;
     });
-    message += "Fiyat ve teslim süresi hakkında bilgi alabilir miyim?";
-
-    const instagramUsername = "layercat3d"; // buraya doğru kullanıcı adı
-    const encodedMessage = encodeURIComponent(message);
-
-    // Instagram DM sayfası aç
-    window.open(`https://www.instagram.com/direct/new/?username=${instagramUsername}&text=${encodedMessage}`, "_blank");
+    alert(message);
 }
+
+}
+
 
