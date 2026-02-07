@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>LayerCat3D | 3D Baskı Ürünler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>LayerCat3D</h1>
+    <p>3D Baskı Anahtarlık • Hediyelik • Ev Dekoru</p>
+</header>
+
+<section>
+    <h2>Ürünler</h2>
+
+    <!-- ANAHTARLIKLAR -->
+    <h3 class="category-title">🔑 Anahtarlıklar</h3>
+    <div class="product-grid">
+
+        <div class="product">
+            <img src="images/anahtarlik-01.jpg" alt="Klasik Anahtarlık">
+            <h4>Klasik Anahtarlık</h4>
+            <p class="product-code"><strong>LC-01</strong></p>
+
+            <label>Renk</label>
+            <select id="color-lc01">
+                <option>Siyah</option>
+                <option>Beyaz</option>
+                <option>Kırmızı</option>
+            </select>
+
+            <label>İsim / Yazı</label>
+            <input type="text" id="text-lc01" placeholder="Örn: Ali">
+
+            <label>Adet</label>
+            <input type="number" id="qty-lc01" value="1" min="1">
+
+            <button onclick="addToCart('Klasik Anahtarlık','LC-01','color-lc01','qty-lc01','text-lc01')">Sepete Ekle</button>
+        </div>
+
+        <div class="product">
+            <img src="images/anahtarlik-02.jpg" alt="Dino Anahtarlık">
+            <h4>Dino Anahtarlık</h4>
+            <p class="product-code"><strong>LC-02</strong></p>
+
+            <label>Renk</label>
+            <select id="color-lc02">
+                <option>Siyah</option>
+                <option>Beyaz</option>
+                <option>Gri</option>
+            </select>
+
+            <label>İsim / Yazı</label>
+            <input type="text" id="text-lc02" placeholder="Örn: Elif">
+
+            <label>Adet</label>
+            <input type="number" id="qty-lc02" value="1" min="1">
+
+            <button onclick="addToCart('Dino Anahtarlık','LC-02','color-lc02','qty-lc02','text-lc02')">Sepete Ekle</button>
+        </div>
+
+ <div class="product">
+            <img src="images/anahtarlik-03.jpg" alt="Dino2 Anahtarlık">
+            <h4>Dino2 Anahtarlık</h4>
+            <p class="product-code"><strong>LC-03</strong></p>
+
+            <label>Renk</label>
+            <select id="color-lc03">
+                <option>Siyah</option>
+                <option>Beyaz</option>
+                <option>Gri</option>
+            </select>
+
+            <label>İsim / Yazı</label>
+            <input type="text" id="text-lc03" placeholder="Örn: Elif">
+
+            <label>Adet</label>
+            <input type="number" id="qty-lc03" value="1" min="1">
+
+            <button onclick="addToCart('Dino2 Anahtarlık','LC-03','color-lc03','qty-lc03','text-lc03')">Sepete Ekle</button>
+        </div>
+
+        <!-- İstediğin kadar ürün ekleyebilirsin -->
+    </div>
+
+    <!-- EV DEKORASYONU -->
+    <h3 class="category-title">🏠 Ev Dekorasyonu</h3>
+    <div class="product-grid">
+
+        <div class="product">
+            <img src="images/dekor-01.jpg" alt="Masa Üstü Dekor">
+            <h4>Masa Üstü Dekor</h4>
+            <p class="product-code"><strong>LC-11</strong></p>
+
+            <label>Renk</label>
+            <select id="color-dekor01">
+                <option>Siyah</option>
+                <option>Gri</option>
+                <option>Ahşap</option>
+            </select>
+
+            <label>İsim / Yazı</label>
+            <input type="text" id="text-dekor01" placeholder="Örn: Home">
+
+            <label>Adet</label>
+            <input type="number" id="qty-dekor01" value="1" min="1">
+
+            <button onclick="addToCart('Masa Üstü Dekor','LC-11','color-dekor01','qty-dekor01','text-dekor01')">Sepete Ekle</button>
+        </div>
+
+        <div class="product">
+            <img src="images/dekor-02.jpg" alt="Duvar Dekoru">
+            <h4>Duvar Dekoru</h4>
+            <p class="product-code"><strong>LC-12</strong></p>
+
+            <label>Renk</label>
+            <select id="color-dekor02">
+                <option>Beyaz</option>
+                <option>Ahşap</option>
+                <option>Gri</option>
+            </select>
+
+            <label>İsim / Yazı</label>
+            <input type="text" id="text-dekor02" placeholder="Örn: Family">
+
+            <label>Adet</label>
+            <input type="number" id="qty-dekor02" value="1" min="1">
+
+            <button onclick="addToCart('Duvar Dekoru','LC-12','color-dekor02','qty-dekor02','text-dekor02')">Sepete Ekle</button>
+        </div>
+
+    </div>
+</section>
+
+<!-- SEPET -->
+<section id="cart">
+    <h2>Sepet</h2>
+    <ul id="cart-items"></ul>
+    <button class="order-btn" onclick="orderInstagram()">Instagram’dan Sipariş Ver</button>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
