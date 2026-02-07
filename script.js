@@ -45,21 +45,19 @@ function removeItem(index) {
     renderCart();
 }
 
-function orderInstagram() {
-    // Sepet boşsa uyar
+function orderWhatsApp() {
     if (cart.length === 0) {
         alert("Sepet boş!");
         return;
     }
 
-    // Instagram profil sayfasını aç
-    const instagramProfile = "https://www.instagram.com/layercat3d";
-    window.open(instagramProfile, "_blank");
+    let message = "Merhaba 👋\n\nLayerCat3D’den sipariş vermek istiyorum:\n\n";
+    cart.forEach(item => {
+        message += `- ${item.quantity} adet ${item.product} (${item.code})\n  Renk: ${item.color}\n  Yazı: ${item.text}\n\n`;
+    });
+    message += "Fiyat ve teslim süresi hakkında bilgi alabilir miyim?";
 
-  
+    const phoneNumber = "905439287380"; // Türkiye için başına 90 eklemeliyiz
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
 }
-
-}
-
-
-
