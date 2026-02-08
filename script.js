@@ -1,123 +1,120 @@
-let cart = {};
-let modalQty = 1;
-let modalCode = "";
-let modalIndex = 0;
-let dropdownOpen = false;
+let cart={}, modalQty=1, modalCode="", modalIndex=0, dropdownOpen=false;
 
-// Çoklu görseller
-const products = {
-  // ANAHTARLIKLAR
-  "LC101": ["images/LC101-1.jpg","images/LC101-2.jpg"],
-  "LC102": ["images/LC102-1.jpg","images/LC102-2.jpg"],
-  "LC103": ["images/LC103-1.jpg","images/LC103-2.jpg"],
-  "LC104": ["images/LC104-1.jpg","images/LC104-2.jpg"],
-  "LC105": ["images/LC105-1.jpg","images/LC105-2.jpg"],
-  "LC106": ["images/LC106-1.jpg","images/LC106-2.jpg"],
-  "LC107": ["images/LC107-1.jpg","images/LC107-2.jpg"],
-  "LC108": ["images/LC108-1.jpg","images/LC108-2.jpg"],
-  "LC109": ["images/LC109-1.jpg","images/LC109-2.jpg"],
-  "LC110": ["images/LC110-1.jpg","images/LC110-2.jpg"],
-  "LC111": ["images/LC111-1.jpg","images/LC111-2.jpg"],
-  "LC112": ["images/LC112-1.jpg","images/LC112-2.jpg"],
+// ÜRÜNLERİ OLUŞTUR
+const products={};
 
-  // ÇERÇEVELER
-  "LC201": ["images/LC201-1.jpg","images/LC201-2.jpg"],
-  "LC202": ["images/LC202-1.jpg","images/LC202-2.jpg"],
-  "LC203": ["images/LC203-1.jpg","images/LC203-2.jpg"],
-  "LC204": ["images/LC204-1.jpg","images/LC204-2.jpg"],
-  "LC205": ["images/LC205-1.jpg","images/LC205-2.jpg"],
-  "LC206": ["images/LC206-1.jpg","images/LC206-2.jpg"],
-
-  // EV DEKORASYON
-  "LC301": ["images/LC301-1.jpg","images/LC301-2.jpg","images/LC301-3.jpg"],
-  "LC302": ["images/LC302-1.jpg","images/LC302-2.jpg"],
-  "LC303": ["images/LC303-1.jpg","images/LC303-2.jpg"],
-  "LC304": ["images/LC304-1.jpg","images/LC304-2.jpg"],
-  "LC305": ["images/LC305-1.jpg","images/LC305-2.jpg"],
-  "LC306": ["images/LC306-1.jpg","images/LC306-2.jpg"],
-  "LC307": ["images/LC307-1.jpg","images/LC307-2.jpg"]
+// Anahtarlıklar LC101-LC150
+for(let i=101;i<=150;i++){
+    let code=`LC${i}`;
+    products[code]={ 
+        imgs:[`images/${code}-1.jpg`,`images/${code}-2.jpg`],
+        desc:`Anahtarlık ${i} açıklama`,
+        vars:["Küçük","Büyük"]
+    };
+products["LC101"] = { 
+    imgs:["images/LC101-1.jpg","images/LC101-2.jpg"],
+    desc:"Dans Eden Dino Anahtarlık",  // <-- burası ürün açıklaması
+    vars:["8cm","15cm"]
 };
 
-
-/* DROPDOWN */
-function toggleDropdown(e){
-    e.stopPropagation();
-    dropdownOpen = !dropdownOpen;
-    document.getElementById("productDropdown").classList.toggle("open", dropdownOpen);
-}
-document.addEventListener("click", ()=>{
-    dropdownOpen = false;
-    document.getElementById("productDropdown").classList.remove("open");
-});
-
-/* SCROLL TO CATEGORY */
-function scrollToCategory(cat){
-    const el = document.getElementById(`cat-${cat}`);
-    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-/* DARK / LIGHT MODE */
-function toggleTheme(){
-    document.body.classList.toggle("light");
-    localStorage.theme = document.body.classList.contains("light") ? "light" : "dark";
+// Çerçeveler LC201-LC205
+for(let i=201;i<=205;i++){
+    let code=`LC${i}`;
+    products[code]={ 
+        imgs:[`images/${code}-1.jpg`,`images/${code}-2.jpg`],
+        desc:`Çerçeve ${i} açıklama`,
+        vars:["Siyah","Beyaz"]
+    };
 }
-if(localStorage.theme==="light") document.body.classList.add("light");
 
-/* MODAL */
+// Ev-dekorasyon LC301-LC325
+for(let i=301;i<=325;i++){
+    let code=`LC${i}`;
+    products[code]={ 
+        imgs:[`images/${code}-1.jpg`,`images/${code}-2.jpg`],
+        desc:`Ev-dekorasyon ${i} açıklama`,
+        vars:["Ahşap","Plastik"]
+    };
+}
+
+// DROPDOWN
+function toggleDropdown(e){e.stopPropagation();dropdownOpen=!dropdownOpen;document.getElementById("productDropdown").classList.toggle("open",dropdownOpen);}
+document.addEventListener("click",()=>{dropdownOpen=false;document.getElementById("productDropdown").classList.remove("open");});
+
+// SCROLL TO CATEGORY
+function scrollToCategory(cat){const el=document.getElementById(`cat-${cat}`);if(el) el.scrollIntoView({behavior:'smooth',block:'start'});}
+
+// THEME
+function toggleTheme(){document.body.classList.toggle("light");localStorage.theme=document.body.classList.contains("light")?"light":"dark";}
+if(localStorage.theme==="light")document.body.classList.add("light");
+
+// MODAL
 function openProduct(code){
-    modalCode = code;
-    modalQty = 1;
-    modalIndex = 0;
-    document.getElementById("modalImg").src = products[code][modalIndex];
-    document.getElementById("modalCode").textContent = code;
-    document.getElementById("modalQty").textContent = modalQty;
-    document.getElementById("productModal").classList.add("open");
+  modalCode=code;modalQty=1;modalIndex=0;
+  document.getElementById("modalImg").src=products[code].imgs[0];
+  document.getElementById("modalCode").textContent=code;
+  document.getElementById("modalQty").textContent=modalQty;
+  const sel=document.getElementById("modalVar"); sel.innerHTML="";
+  products[code].vars.forEach(v=>sel.innerHTML+=`<option>${v}</option>`);
+  document.getElementById("modalDesc").textContent=products[code].desc;
+  document.getElementById("productModal").classList.add("open");
+}
+function closeProduct(){document.getElementById("productModal").classList.remove("open");}
+function changeModalQty(v){modalQty=Math.max(1,modalQty+v);document.getElementById("modalQty").textContent=modalQty;}
+function addFromModal(){
+  const varSelect=document.getElementById("modalVar").value;
+  const key=modalCode+"-"+varSelect;
+  cart[key]=(cart[key]||0)+modalQty;
+  closeProduct(); renderCart(); toggleCart();
 }
 
-function closeProduct(){ document.getElementById("productModal").classList.remove("open"); }
-function changeModalQty(v){ modalQty=Math.max(1, modalQty+v); document.getElementById("modalQty").textContent = modalQty; }
-function addFromModal(){ cart[modalCode]=(cart[modalCode]||0)+modalQty; closeProduct(); renderCart(); toggleCart(); }
+// MODAL IMAGE
+function nextImage(){modalIndex=(modalIndex+1)%products[modalCode].imgs.length; document.getElementById("modalImg").src=products[modalCode].imgs[modalIndex];}
+function prevImage(){modalIndex=(modalIndex-1+products[modalCode].imgs.length)%products[modalCode].imgs.length; document.getElementById("modalImg").src=products[modalCode].imgs[modalIndex];}
 
-/* Modal galerisi */
-function nextImage(){
-    if(!products[modalCode]) return;
-    modalIndex = (modalIndex + 1) % products[modalCode].length;
-    document.getElementById("modalImg").src = products[modalCode][modalIndex];
-}
-function prevImage(){
-    if(!products[modalCode]) return;
-    modalIndex = (modalIndex - 1 + products[modalCode].length) % products[modalCode].length;
-    document.getElementById("modalImg").src = products[modalCode][modalIndex];
-}
-
-/* SEPET DRAWER */
-function toggleCart(){ document.getElementById("cart-drawer").classList.toggle("open"); }
-
+// CART DRAWER
+function toggleCart(){document.getElementById("cartDrawer").classList.toggle("open");}
 function renderCart(){
-    const div = document.getElementById("cart-items"); div.innerHTML=""; let count=0;
-    for(let k in cart){
-        count+=cart[k];
-        div.innerHTML+=`<div>
-            <img src="${products[k][0]}" alt="${k}">
-            <span>${k}</span>
-            <div class="qty-drawer">
-                <button onclick="changeCartQty('${k}',-1)">−</button>
-                <span>${cart[k]}</span>
-                <button onclick="changeCartQty('${k}',1)">+</button>
-            </div>
-        </div>`;
-    }
-    document.getElementById("cart-count").textContent=count;
+  const div=document.getElementById("cartItems"); div.innerHTML="";
+  let count=0;
+  for(let k in cart){
+    count+=cart[k];
+    div.innerHTML+=`<div class="cart-item"><img src="${products[k.split('-')[0]].imgs[0]}" alt="${k}"><span>${k}</span><div class="qty-drawer"><button onclick="changeCartQty('${k}',-1)">−</button><span>${cart[k]}</span><button onclick="changeCartQty('${k}',1)">+</button></div></div>`;
+  }
+  document.getElementById("cartCount").textContent=count;
 }
-function changeCartQty(code,v){ cart[code]+=v; if(cart[code]<=0) delete cart[code]; renderCart(); }
+function changeCartQty(code,v){cart[code]+=v; if(cart[code]<=0) delete cart[code]; renderCart();}
 
-/* WHATSAPP */
+// WHATSAPP
 function sendWhatsApp(){
-    let m="Merhaba, sipariş vermek istiyorum:%0A";
-    for(let k in cart){ m+=`${k} x ${cart[k]}%0A`; }
-    window.open(`https://wa.me/905439287380?text=${m}`);
+  let m="Merhaba, sipariş vermek istiyorum:%0A";
+  for(let k in cart) m+=`${k} x ${cart[k]}%0A`;
+  window.open(`https://wa.me/905439287380?text=${m}`);
 }
 
+// HORIZONTAL SCROLL BUTTONS
+function scrollLeft(gridId){document.getElementById(gridId).scrollBy({left:-300,behavior:'smooth'});}
+function scrollRight(gridId){document.getElementById(gridId).scrollBy({left:300,behavior:'smooth'});}
 
+// RENDER PRODUCTS
+function renderProducts(){
+  const keysGrid=document.getElementById("keysGrid");
+  const framesGrid=document.getElementById("framesGrid");
+  const decorGrid=document.getElementById("decorGrid");
+  for(let k in products){
+    const card=document.createElement("div");
+    card.className="product-card";
+    card.innerHTML=`<img src="${products[k].imgs[0]}" alt="${k}"><span>${k}</span>`;
+    card.onclick=()=>openProduct(k);
+    if(k.startsWith("LC1")) keysGrid.appendChild(card);
+    else if(k.startsWith("LC2")) framesGrid.appendChild(card);
+    else if(k.startsWith("LC3")) decorGrid.appendChild(card);
+  }
+}
+renderProducts();
+renderCart();
 
-
+// AUTOMATIC SLIDE
+setInterval(()=>{["keysGrid","framesGrid","decorGrid"].forEach(id=>scrollRight(id));},5000);
