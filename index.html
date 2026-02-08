@@ -10,7 +10,7 @@
 
 <header>
   <div class="brand" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-    <img src="images/logo.jpg" alt="LayerCat3D">
+    <img src="images/logo.png" alt="LayerCat3D">
     <div>
       <div class="brand-name">LayerCat3D</div>
       <div class="brand-slogan">Printing Purr-Fection</div>
@@ -33,20 +33,20 @@
   <div class="product-section" id="cat-anahtarlik">
     <h2>Anahtarlıklar</h2>
     <div class="product-grid">
-      <div class="product-card" data-category="anahtarlik" onclick="openProduct('LC101','images/LC101.jpg')">
-        <img src="images/LC101.jpg" alt="LC101"><p>LC101</p>
+      <div class="product-card" data-code="LC101" onclick="openProduct('LC101')">
+        <img src="images/LC101-1.jpg" alt="LC101"><p>LC101</p>
       </div>
-      <div class="product-card" data-category="anahtarlik" onclick="openProduct('LC102','images/LC102.jpg')">
-        <img src="images/LC102.jpg" alt="LC102"><p>LC102</p>
+      <div class="product-card" data-code="LC102" onclick="openProduct('LC102')">
+        <img src="images/LC102-1.jpg" alt="LC102"><p>LC102</p>
       </div>
-       <div class="product-card" data-category="anahtarlik" onclick="openProduct('LC101','images/LC101.jpg')">
-        <img src="images/LC103.jpg" alt="LC101"><p>LC103</p>
+      <div class="product-card" data-code="LC103" onclick="openProduct('LC103')">
+        <img src="images/LC103-1.jpg" alt="LC103"><p>LC103</p>
       </div>
-       <div class="product-card" data-category="anahtarlik" onclick="openProduct('LC101','images/LC101.jpg')">
-        <img src="images/LC104.jpg" alt="LC101"><p>LC104</p>
+      <div class="product-card" data-code="LC104" onclick="openProduct('LC104')">
+        <img src="images/LC104-1.jpg" alt="LC104"><p>LC104</p>
       </div>
-       <div class="product-card" data-category="anahtarlik" onclick="openProduct('LC101','images/LC101.jpg')">
-        <img src="images/LC105.jpg" alt="LC101"><p>LC105</p>
+      <div class="product-card" data-code="LC105" onclick="openProduct('LC105')">
+        <img src="images/LC105-1.jpg" alt="LC105"><p>LC105</p>
       </div>
     </div>
   </div>
@@ -55,11 +55,11 @@
   <div class="product-section" id="cat-cerceve">
     <h2>Çerçeveler</h2>
     <div class="product-grid">
-      <div class="product-card" data-category="cerceve" onclick="openProduct('LC201','images/LC201.jpg')">
-        <img src="images/LC201.jpg" alt="LC201"><p>LC201</p>
+      <div class="product-card" data-code="LC201" onclick="openProduct('LC201')">
+        <img src="images/LC201-1.jpg" alt="LC201"><p>LC201</p>
       </div>
-      <div class="product-card" data-category="cerceve" onclick="openProduct('LC202','images/LC202.jpg')">
-        <img src="images/LC202.jpg" alt="LC202"><p>LC202</p>
+      <div class="product-card" data-code="LC202" onclick="openProduct('LC202')">
+        <img src="images/LC202-1.jpg" alt="LC202"><p>LC202</p>
       </div>
     </div>
   </div>
@@ -68,11 +68,11 @@
   <div class="product-section" id="cat-ev-dekor">
     <h2>Ev-Dekorasyon Ürünleri</h2>
     <div class="product-grid">
-      <div class="product-card" data-category="ev-dekor" onclick="openProduct('LC301','images/LC301.jpg')">
-        <img src="images/LC301.jpg" alt="LC301"><p>LC301</p>
+      <div class="product-card" data-code="LC301" onclick="openProduct('LC301')">
+        <img src="images/LC301-1.jpg" alt="LC301"><p>LC301</p>
       </div>
-      <div class="product-card" data-category="ev-dekor" onclick="openProduct('LC302','images/LC302.jpg')">
-        <img src="images/LC302.jpg" alt="LC302"><p>LC302</p>
+      <div class="product-card" data-code="LC302" onclick="openProduct('LC302')">
+        <img src="images/LC302-1.jpg" alt="LC302"><p>LC302</p>
       </div>
     </div>
   </div>
@@ -83,6 +83,10 @@
   <div class="modal-content">
     <span onclick="closeProduct()" style="cursor:pointer;float:right;">✖</span>
     <img id="modalImg" src="" alt="">
+    <div style="margin-top:10px;">
+      <button onclick="prevImage()">◀</button>
+      <button onclick="nextImage()">▶</button>
+    </div>
     <p id="modalCode"></p>
     <div class="qty">
       <button onclick="changeModalQty(-1)">−</button>
@@ -103,4 +107,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
