@@ -1,63 +1,69 @@
-let cart = [];
+let cart = {};
+let modalQty = 1;
+let modalCode = "";
+let dropdownOpen = false;
 
-function addToCart(product, code, colorId, qtyId, textId) {
-    const color = document.getElementById(colorId).value;
-    const quantity = parseInt(document.getElementById(qtyId).value);
-    const text = document.getElementById(textId).value || "Yok";
+/* DROPDOWN */
+function toggleDropdown(e){
+    e.stopPropagation();
+    dropdownOpen = !dropdownOpen;
+    document.getElementById("productDropdown").classList.toggle("open", dropdownOpen);
+}
+document.addEventListener("click", ()=>{
+    dropdownOpen = false;
+    document.getElementById("productDropdown").classList.remove("open");
+});
 
-    cart.push({ product, code, color, quantity, text });
-    renderCart();
+/* SCROLL TO CATEGORY */
+function scrollToCategory(cat){
+    const el = document.getElementById(`cat-${cat}`);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function renderCart() {
-    const cartList = document.getElementById("cart-items");
-    cartList.innerHTML = "";
+/* DARK / LIGHT MODE */
+function toggleTheme(){
+    document.body.classList.toggle("dark");
+    localStorage.theme = document.body.classList.contains("dark") ? "dark" : "light";
+}
+if(localStorage.theme==="dark") document.body.classList.add("dark");
 
-    cart.forEach((item, index) => {
-        const li = document.createElement("li");
-        li.className = "cart-item";
+/* MODAL */
+function openProduct(code,img){
+    modalCode = code;
+    modalQty = 1;
+    document.getElementById("modalImg").src = img;
+    document.getElementById("modalCode").textContent = code;
+    document.getElementById("modalQty").textContent = modalQty;
+    document.getElementById("productModal").classList.add("open");
+}
+function closeProduct(){ document.getElementById("productModal").classList.remove("open"); }
+function changeModalQty(v){ modalQty=Math.max(1, modalQty+v); document.getElementById("modalQty").textContent = modalQty; }
+function addFromModal(){ cart[modalCode]=(cart[modalCode]||0)+modalQty; closeProduct(); renderCart(); toggleCart(); }
 
-        li.innerHTML = `
-            <div>
-                <strong>${item.product}</strong> (${item.code})<br>
-                ${item.quantity} adet • ${item.color}<br>
-                Yazı: ${item.text}
+/* SEPET DRAWER */
+function toggleCart(){ document.getElementById("cart-drawer").classList.toggle("open"); }
+
+function renderCart(){
+    const div = document.getElementById("cart-items"); div.innerHTML=""; let count=0;
+    for(let k in cart){
+        count+=cart[k];
+        div.innerHTML+=`<div>
+            <img src="images/${k}.jpg" alt="${k}">
+            <span>${k}</span>
+            <div class="qty-drawer">
+                <button onclick="changeCartQty('${k}',-1)">−</button>
+                <span>${cart[k]}</span>
+                <button onclick="changeCartQty('${k}',1)">+</button>
             </div>
-            <div class="cart-controls">
-                <button onclick="changeQty(${index}, -1)">−</button>
-                <button onclick="changeQty(${index}, 1)">+</button>
-                <button class="remove-btn" onclick="removeItem(${index})">🗑</button>
-            </div>
-        `;
-
-        cartList.appendChild(li);
-    });
-}
-
-function changeQty(index, amount) {
-    cart[index].quantity += amount;
-    if (cart[index].quantity < 1) cart[index].quantity = 1;
-    renderCart();
-}
-
-function removeItem(index) {
-    cart.splice(index, 1);
-    renderCart();
-}
-
-function orderWhatsApp() {
-    if (cart.length === 0) {
-        alert("Sepet boş!");
-        return;
+        </div>`;
     }
+    document.getElementById("cart-count").textContent=count;
+}
+function changeCartQty(code,v){ cart[code]+=v; if(cart[code]<=0) delete cart[code]; renderCart(); }
 
-    let message = "Merhaba 👋\n\nLayerCat3D’den sipariş vermek istiyorum:\n\n";
-    cart.forEach(item => {
-        message += `- ${item.quantity} adet ${item.product} (${item.code})\n  Renk: ${item.color}\n  Yazı: ${item.text}\n\n`;
-    });
-    message += "Fiyat ve teslim süresi hakkında bilgi alabilir miyim?";
-
-    const phoneNumber = "905439287380"; // Türkiye için başına 90 eklemeliyiz
-    const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
+/* WHATSAPP */
+function sendWhatsApp(){
+    let m="Merhaba, sipariş vermek istiyorum:%0A";
+    for(let k in cart){ m+=`${k} x ${cart[k]}%0A`; }
+    window.open(`https://wa.me/905439287380?text=${m}`);
 }
