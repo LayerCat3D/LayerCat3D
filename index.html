@@ -5,122 +5,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LayerCat3D</title>
 <link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body>
 
-<header>
-  <div class="brand" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+<body class="dark">
+
+<header class="header">
+  <div class="logo" onclick="location.reload()">
     <img src="images/logo.jpg" alt="LayerCat3D">
-    <div>
-      <div class="brand-name">LayerCat3D</div>
-      <div class="brand-slogan">Printing Purr-Fection</div>
+    <div class="logo-text">
+      <h1>LayerCat3D</h1>
+      <span>Printing Purr-Fection</span>
     </div>
   </div>
+
   <nav>
-    <button onclick="toggleDropdown(event)">Ürünler ▼</button>
-    <div id="productDropdown" class="dropdown-menu">
-      <div onclick="scrollToCategory('anahtarlik')">Anahtarlıklar</div>
-      <div onclick="scrollToCategory('cerceve')">Çerçeveler</div>
-      <div onclick="scrollToCategory('ev-dekor')">Ev-Dekorasyon</div>
+    <div class="dropdown">
+      <button onclick="toggleDropdown(event)">Ürünler ▾</button>
+      <div id="productDropdown" class="dropdown-menu">
+        <div onclick="scrollToCategory('anahtarlik')">Anahtarlıklar</div>
+        <div onclick="scrollToCategory('cerceve')">Çerçeveler</div>
+        <div onclick="scrollToCategory('ev')">Ev-Dekorasyon</div>
+      </div>
     </div>
-    <button onclick="toggleTheme()">🌓</button>
-    <button onclick="toggleCart()">Sepet (<span id="cart-count">0</span>)</button>
+    <button onclick="toggleTheme()">🌙 / ☀️</button>
+    <button class="cart-btn" onclick="toggleCart()">🛒 <span id="cartCount">0</span></button>
   </nav>
 </header>
 
 <main>
-  <!-- Anahtarlıklar -->
-  <div class="product-section" id="cat-anahtarlik">
+  <!-- ANAHTARLIKLAR -->
+  <section id="cat-anahtarlik" class="category">
     <h2>Anahtarlıklar</h2>
-    <div class="product-grid">
-      <div class="product-card" data-code="LC101" onclick="openProduct('LC101')">
-        <img src="images/LC101-1.jpg" alt="LC101"><p>LC101</p>
-      </div>
-      <div class="product-card" data-code="LC102" onclick="openProduct('LC102')">
-        <img src="images/LC102-1.jpg" alt="LC102"><p>LC102</p>
-      </div>
-      <div class="product-card" data-code="LC103" onclick="openProduct('LC103')">
-        <img src="images/LC103-1.jpg" alt="LC103"><p>LC103</p>
-      </div>
-      <div class="product-card" data-code="LC104" onclick="openProduct('LC104')">
-        <img src="images/LC104-1.jpg" alt="LC104"><p>LC104</p>
-      </div>
-      <div class="product-card" data-code="LC105" onclick="openProduct('LC105')">
-        <img src="images/LC105-1.jpg" alt="LC105"><p>LC105</p>
-      </div>
-            <div class="product-card" data-code="LC106" onclick="openProduct('LC106')">
-        <img src="images/LC106-1.jpg" alt="LC106"><p>LC106</p>
-      </div>
-            <div class="product-card" data-code="LC107" onclick="openProduct('LC107')">
-        <img src="images/LC107-1.jpg" alt="LC107"><p>LC107</p>
-      </div>
-            <div class="product-card" data-code="LC108" onclick="openProduct('LC108')">
-        <img src="images/LC108-1.jpg" alt="LC108"><p>LC108</p>
-      </div>
+    <div class="scroll-container">
+      <button class="scroll-btn left" onclick="scrollLeft('keysGrid')">◀</button>
+      <div class="product-scroll" id="keysGrid"></div>
+      <button class="scroll-btn right" onclick="scrollRight('keysGrid')">▶</button>
+      <div class="scroll-hint">Kaydır →</div>
     </div>
-  </div>
+  </section>
 
-  <!-- Çerçeveler -->
-  <div class="product-section" id="cat-cerceve">
+  <!-- ÇERÇEVELER -->
+  <section id="cat-cerceve" class="category">
     <h2>Çerçeveler</h2>
-    <div class="product-grid">
-      <div class="product-card" data-code="LC201" onclick="openProduct('LC201')">
-        <img src="images/LC201-1.jpg" alt="LC201"><p>LC201</p>
-      </div>
-      <div class="product-card" data-code="LC202" onclick="openProduct('LC202')">
-        <img src="images/LC202-1.jpg" alt="LC202"><p>LC202</p>
-      </div>
-            <div class="product-card" data-code="LC203" onclick="openProduct('LC203')">
-        <img src="images/LC203-1.jpg" alt="LC203"><p>LC203</p>
-      </div>
-      <div class="product-card" data-code="LC204" onclick="openProduct('LC204')">
-        <img src="images/LC204-1.jpg" alt="LC204"><p>LC204</p>
-      </div>
-            <div class="product-card" data-code="LC205" onclick="openProduct('LC205')">
-        <img src="images/LC205-1.jpg" alt="LC205"><p>LC205</p>
-      </div>
-      <div class="product-card" data-code="LC206" onclick="openProduct('LC206')">
-        <img src="images/LC206-1.jpg" alt="LC206"><p>LC206</p>
-      </div>
+    <div class="scroll-container">
+      <button class="scroll-btn left" onclick="scrollLeft('framesGrid')">◀</button>
+      <div class="product-scroll" id="framesGrid"></div>
+      <button class="scroll-btn right" onclick="scrollRight('framesGrid')">▶</button>
+      <div class="scroll-hint">Kaydır →</div>
     </div>
-  </div>
+  </section>
 
-  <!-- Ev-Dekorasyon -->
-  <div class="product-section" id="cat-ev-dekor">
-    <h2>Ev-Dekorasyon Ürünleri</h2>
-    <div class="product-grid">
-      <div class="product-card" data-code="LC301" onclick="openProduct('LC301')">
-        <img src="images/LC301-1.jpg" alt="LC301"><p>LC301</p>
-      </div>
-      <div class="product-card" data-code="LC302" onclick="openProduct('LC302')">
-        <img src="images/LC302-1.jpg" alt="LC302"><p>LC302</p>
-      </div>
-            <div class="product-card" data-code="LC303" onclick="openProduct('LC303')">
-        <img src="images/LC303-1.jpg" alt="LC303"><p>LC303</p>
-      </div>
-            <div class="product-card" data-code="LC304" onclick="openProduct('LC304')">
-        <img src="images/LC304-1.jpg" alt="LC304"><p>LC304</p>
-      </div>
-            <div class="product-card" data-code="LC305" onclick="openProduct('LC305')">
-        <img src="images/LC305-1.jpg" alt="LC305"><p>LC305</p>
-      </div>
-            <div class="product-card" data-code="LC306" onclick="openProduct('LC306')">
-        <img src="images/LC306-1.jpg" alt="LC306"><p>LC306</p>
-      </div>
+  <!-- EV-DEKORASYON -->
+  <section id="cat-ev" class="category">
+    <h2>Ev-Dekorasyon</h2>
+    <div class="scroll-container">
+      <button class="scroll-btn left" onclick="scrollLeft('decorGrid')">◀</button>
+      <div class="product-scroll" id="decorGrid"></div>
+      <button class="scroll-btn right" onclick="scrollRight('decorGrid')">▶</button>
+      <div class="scroll-hint">Kaydır →</div>
     </div>
-  </div>
+  </section>
 </main>
 
-<!-- MODAL -->
-<div id="productModal">
+<!-- PRODUCT MODAL -->
+<div id="productModal" class="modal">
   <div class="modal-content">
-    <span onclick="closeProduct()" style="cursor:pointer;float:right;">✖</span>
-    <img id="modalImg" src="" alt="">
-    <div style="margin-top:10px;">
+    <span class="close" onclick="closeProduct()">✕</span>
+    <img id="modalImg">
+    <div class="gallery-controls">
       <button onclick="prevImage()">◀</button>
       <button onclick="nextImage()">▶</button>
     </div>
-    <p id="modalCode"></p>
+    <h3 id="modalCode"></h3>
+    <p id="modalDesc"></p>
+    <label for="modalVar">Varyasyon:</label>
+    <select id="modalVar"></select>
     <div class="qty">
       <button onclick="changeModalQty(-1)">−</button>
       <span id="modalQty">1</span>
@@ -130,17 +90,16 @@
   </div>
 </div>
 
-<!-- SEPET DRAWER -->
-<div id="cart-drawer">
-  <span class="close" onclick="toggleCart()">✖</span>
-  <div id="cart-items"></div>
-  <button class="whatsapp" onclick="sendWhatsApp()">WhatsApp Sipariş Ver</button>
+<!-- CART DRAWER -->
+<div id="cartDrawer" class="cart-drawer">
+  <div class="cart-header">
+    <h3>Sepet</h3>
+    <button onclick="toggleCart()">✕</button>
+  </div>
+  <div id="cartItems"></div>
+  <button class="whatsapp" onclick="sendWhatsApp()">WhatsApp ile Sipariş</button>
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
