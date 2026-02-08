@@ -1,124 +1,95 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>LayerCat3D | 3D Baskı Ürünler</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LayerCat3D</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <h1>LayerCat3D</h1>
-    <p>3D Baskı Anahtarlık • Hediyelik • Ev Dekoru</p>
+  <div class="brand" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    <img src="images/logo.jpg" alt="LayerCat3D">
+    <div>
+      <div class="brand-name">LayerCat3D</div>
+      <div class="brand-slogan">Printing Purr-Fection</div>
+    </div>
+  </div>
+  <nav>
+    <button onclick="toggleDropdown(event)">Ürünler ▼</button>
+    <div id="productDropdown" class="dropdown-menu">
+      <div onclick="scrollToCategory('anahtarlik')">Anahtarlıklar</div>
+      <div onclick="scrollToCategory('cerceve')">Çerçeveler</div>
+      <div onclick="scrollToCategory('ev-dekor')">Ev-Dekorasyon</div>
+    </div>
+    <button onclick="toggleTheme()">🌓</button>
+    <button onclick="toggleCart()">Sepet (<span id="cart-count">0</span>)</button>
+  </nav>
 </header>
 
-<section>
-    <h2>Ürünler</h2>
-
-    <!-- ANAHTARLIKLAR -->
-    <h3 class="category-title">🔑 Anahtarlıklar</h3>
+<main>
+  <!-- Anahtarlıklar -->
+  <div class="product-section" id="cat-anahtarlik">
+    <h2>Anahtarlıklar</h2>
     <div class="product-grid">
-
-        <div class="product">
-            <img src="images/anahtarlik-01.jpg" alt="Klasik Anahtarlık">
-            <h4>Klasik Anahtarlık</h4>
-            <p class="product-code"><strong>LC-01</strong></p>
-
-            <label>Renk</label>
-            <select id="color-lc01">
-                <option>Siyah</option>
-                <option>Beyaz</option>
-                <option>Kırmızı</option>
-            </select>
-
-            <label>İsim / Yazı</label>
-            <input type="text" id="text-lc01" placeholder="Örn: Ali">
-
-            <label>Adet</label>
-            <input type="number" id="qty-lc01" value="1" min="1">
-
-            <button onclick="addToCart('Klasik Anahtarlık','LC-01','color-lc01','qty-lc01','text-lc01')">Sepete Ekle</button>
-        </div>
-
-        <div class="product">
-            <img src="images/anahtarlik-02.jpg" alt="Minimal Anahtarlık">
-            <h4>Minimal Anahtarlık</h4>
-            <p class="product-code"><strong>LC-02</strong></p>
-
-            <label>Renk</label>
-            <select id="color-lc02">
-                <option>Siyah</option>
-                <option>Beyaz</option>
-                <option>Gri</option>
-            </select>
-
-            <label>İsim / Yazı</label>
-            <input type="text" id="text-lc02" placeholder="Örn: Elif">
-
-            <label>Adet</label>
-            <input type="number" id="qty-lc02" value="1" min="1">
-
-            <button onclick="addToCart('Minimal Anahtarlık','LC-02','color-lc02','qty-lc02','text-lc02')">Sepete Ekle</button>
-        </div>
-
+      <div class="product-card" data-category="anahtarlik" onclick="openProduct('LC101','images/LC101.jpg')">
+        <img src="images/LC101.jpg" alt="LC101"><p>LC101</p>
+      </div>
+      <div class="product-card" data-category="anahtarlik" onclick="openProduct('LC102','images/LC102.jpg')">
+        <img src="images/LC102.jpg" alt="LC102"><p>LC102</p>
+      </div>
     </div>
+  </div>
 
-    <!-- EV DEKORASYONU -->
-    <h3 class="category-title">🏠 Ev Dekorasyonu</h3>
+  <!-- Çerçeveler -->
+  <div class="product-section" id="cat-cerceve">
+    <h2>Çerçeveler</h2>
     <div class="product-grid">
-
-        <div class="product">
-            <img src="images/dekor-01.jpg" alt="Masa Üstü Dekor">
-            <h4>Masa Üstü Dekor</h4>
-            <p class="product-code"><strong>LC-11</strong></p>
-
-            <label>Renk</label>
-            <select id="color-dekor01">
-                <option>Siyah</option>
-                <option>Gri</option>
-                <option>Ahşap</option>
-            </select>
-
-            <label>İsim / Yazı</label>
-            <input type="text" id="text-dekor01" placeholder="Örn: Home">
-
-            <label>Adet</label>
-            <input type="number" id="qty-dekor01" value="1" min="1">
-
-            <button onclick="addToCart('Masa Üstü Dekor','LC-11','color-dekor01','qty-dekor01','text-dekor01')">Sepete Ekle</button>
-        </div>
-
-        <div class="product">
-            <img src="images/dekor-02.jpg" alt="Duvar Dekoru">
-            <h4>Duvar Dekoru</h4>
-            <p class="product-code"><strong>LC-12</strong></p>
-
-            <label>Renk</label>
-            <select id="color-dekor02">
-                <option>Beyaz</option>
-                <option>Ahşap</option>
-                <option>Gri</option>
-            </select>
-
-            <label>İsim / Yazı</label>
-            <input type="text" id="text-dekor02" placeholder="Örn: Family">
-
-            <label>Adet</label>
-            <input type="number" id="qty-dekor02" value="1" min="1">
-
-            <button onclick="addToCart('Duvar Dekoru','LC-12','color-dekor02','qty-dekor02','text-dekor02')">Sepete Ekle</button>
-        </div>
-
+      <div class="product-card" data-category="cerceve" onclick="openProduct('LC201','images/LC201.jpg')">
+        <img src="images/LC201.jpg" alt="LC201"><p>LC201</p>
+      </div>
+      <div class="product-card" data-category="cerceve" onclick="openProduct('LC202','images/LC202.jpg')">
+        <img src="images/LC202.jpg" alt="LC202"><p>LC202</p>
+      </div>
     </div>
-</section>
+  </div>
 
-<!-- SEPET -->
-<section id="cart">
-    <h2>Sepet</h2>
-    <ul id="cart-items"></ul>
-    <button class="order-btn" onclick="orderWhatsApp()">WhatsApp’tan Sipariş Ver</button>
-</section>
+  <!-- Ev-Dekorasyon -->
+  <div class="product-section" id="cat-ev-dekor">
+    <h2>Ev-Dekorasyon Ürünleri</h2>
+    <div class="product-grid">
+      <div class="product-card" data-category="ev-dekor" onclick="openProduct('LC301','images/LC301.jpg')">
+        <img src="images/LC301.jpg" alt="LC301"><p>LC301</p>
+      </div>
+      <div class="product-card" data-category="ev-dekor" onclick="openProduct('LC302','images/LC302.jpg')">
+        <img src="images/LC302.jpg" alt="LC302"><p>LC302</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div id="productModal">
+  <div class="modal-content">
+    <span onclick="closeProduct()" style="cursor:pointer;float:right;">✖</span>
+    <img id="modalImg" src="" alt="">
+    <p id="modalCode"></p>
+    <div class="qty">
+      <button onclick="changeModalQty(-1)">−</button>
+      <span id="modalQty">1</span>
+      <button onclick="changeModalQty(1)">+</button>
+    </div>
+    <button class="add-cart" onclick="addFromModal()">Sepete Ekle</button>
+  </div>
+</div>
+
+<!-- SEPET DRAWER -->
+<div id="cart-drawer">
+  <span class="close" onclick="toggleCart()">✖</span>
+  <div id="cart-items"></div>
+  <button class="whatsapp" onclick="sendWhatsApp()">WhatsApp Sipariş Ver</button>
+</div>
 
 <script src="script.js"></script>
 </body>
