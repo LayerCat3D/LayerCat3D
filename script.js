@@ -8,6 +8,12 @@ let dropdownOpen = false;
 const products = {
   "LC101": ["images/LC101-1.jpg","images/LC101-2.jpg"],
   "LC102": ["images/LC102-1.jpg","images/LC102-2.jpg"],
+  "LC103": ["images/LC103-1.jpg","images/LC103-2.jpg"],
+  "LC104": ["images/LC104-1.jpg","images/LC104-2.jpg"],
+  "LC105": ["images/LC105-1.jpg","images/LC105-2.jpg"],
+  "LC106": ["images/LC106-1.jpg","images/LC106-2.jpg"],
+  "LC107": ["images/LC107-1.jpg","images/LC107-2.jpg"],
+  "LC108": ["images/LC108-1.jpg","images/LC108-2.jpg"],
   "LC201": ["images/LC201-1.jpg","images/LC201-2.jpg"],
   "LC202": ["images/LC202-1.jpg","images/LC202-1.jpg"],
   "LC301": ["images/LC301-1.jpg","images/LC301-2.jpg","images/LC301-3.jpg"],
@@ -92,3 +98,4 @@ function sendWhatsApp(){
     for(let k in cart){ m+=`${k} x ${cart[k]}%0A`; }
     window.open(`https://wa.me/905439287380?text=${m}`);
 }
+
