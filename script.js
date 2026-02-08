@@ -14,23 +14,23 @@ const products = {
   "LC106": ["images/LC106-1.jpg","images/LC106-2.jpg"],
   "LC107": ["images/LC107-1.jpg","images/LC107-2.jpg"],
   "LC108": ["images/LC108-1.jpg","images/LC108-2.jpg"],
-  "LC108": ["images/LC109-1.jpg","images/LC109-2.jpg"],
-  "LC108": ["images/LC110-1.jpg","images/LC110-2.jpg"],
-  "LC108": ["images/LC111-1.jpg","images/LC111-2.jpg"],
-  "LC108": ["images/LC112-1.jpg","images/LC112-2.jpg"],
+  "LC109": ["images/LC109-1.jpg","images/LC109-2.jpg"],
+  "LC110": ["images/LC110-1.jpg","images/LC110-2.jpg"],
+  "LC111": ["images/LC111-1.jpg","images/LC111-2.jpg"],
+  "LC112": ["images/LC112-1.jpg","images/LC112-2.jpg"],
   "LC201": ["images/LC201-1.jpg","images/LC201-2.jpg"],
   "LC202": ["images/LC202-1.jpg","images/LC202-1.jpg"],
-  "LC201": ["images/LC203-1.jpg","images/LC203-2.jpg"],
-  "LC202": ["images/LC204-1.jpg","images/LC204-1.jpg"],
-  "LC201": ["images/LC205-1.jpg","images/LC205-2.jpg"],
-  "LC202": ["images/LC206-1.jpg","images/LC206-1.jpg"],
-  "LC301": ["images/LC301-1.jpg","images/LC301-2.jpg","images/LC301-3.jpg"],
+  "LC203": ["images/LC203-1.jpg","images/LC203-2.jpg"],
+  "LC204": ["images/LC204-1.jpg","images/LC204-1.jpg"],
+  "LC205": ["images/LC205-1.jpg","images/LC205-2.jpg"],
+  "LC206": ["images/LC206-1.jpg","images/LC206-1.jpg"],
+  "LC301": ["images/LC301-1.jpg","images/LC301-2.jpg"],
   "LC302": ["images/LC302-1.jpg","images/LC302-2.jpg"]
-  "LC302": ["images/LC303-1.jpg","images/LC303-2.jpg"]
-"LC302": ["images/LC302-4.jpg","images/LC304-2.jpg"]
-"LC302": ["images/LC302-5.jpg","images/LC305-2.jpg"]
-"LC302": ["images/LC302-6.jpg","images/LC306-2.jpg"]
-"LC302": ["images/LC302-7.jpg","images/LC307-2.jpg"]
+  "LC303": ["images/LC303-1.jpg","images/LC303-2.jpg"]
+  "LC304": ["images/LC304-1.jpg","images/LC304-2.jpg"]
+  "LC305": ["images/LC305-1.jpg","images/LC305-2.jpg"]
+  "LC306": ["images/LC306-1.jpg","images/LC306-2.jpg"]
+  "LC307": ["images/LC307-1.jpg","images/LC307-2.jpg"]
 };
 
 /* DROPDOWN */
@@ -111,5 +111,6 @@ function sendWhatsApp(){
     for(let k in cart){ m+=`${k} x ${cart[k]}%0A`; }
     window.open(`https://wa.me/905439287380?text=${m}`);
 }
+
 
 
