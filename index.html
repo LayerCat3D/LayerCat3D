@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="images/logo.jpg">
@@ -48,11 +48,19 @@
           <span aria-hidden="true">▾</span>
         </button>
         <div id="productDropdown" class="dropdown-menu" role="menu">
+          <button role="menuitem" data-category="all">Tüm Ürünler</button>
           <button role="menuitem" data-category="anahtarlik">Anahtarlıklar</button>
           <button role="menuitem" data-category="cerceve">Çerçeveler</button>
           <button role="menuitem" data-category="ev">Ev-Dekorasyon</button>
         </div>
       </div>
+      <button 
+        id="favoritesToggle"
+        class="nav-button" 
+        aria-label="Favoriler">
+        <span aria-hidden="true">❤️</span>
+        <span id="favoritesCount" class="favorites-count">0</span>
+      </button>
       <button 
         id="themeToggle"
         class="nav-button" 
@@ -69,7 +77,66 @@
     </nav>
   </header>
 
+  <!-- SEARCH BAR -->
+  <div class="search-container">
+    <div class="search-bar">
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Ürün ara... (örn: LC101, dino, anahtarlık)"
+        aria-label="Ürün ara">
+      <button id="clearSearch" aria-label="Aramayı temizle" style="display: none;">✕</button>
+    </div>
+    <div class="filter-bar">
+      <select id="categoryFilter" aria-label="Kategori filtrele">
+        <option value="all">Tüm Kategoriler</option>
+        <option value="anahtarlik">Anahtarlıklar</option>
+        <option value="cerceve">Çerçeveler</option>
+        <option value="ev">Ev-Dekorasyon</option>
+      </select>
+      <select id="sortFilter" aria-label="Sırala">
+        <option value="default">Varsayılan Sıralama</option>
+        <option value="price-low">Fiyat: Düşükten Yükseğe</option>
+        <option value="price-high">Fiyat: Yüksekten Düşüğe</option>
+        <option value="rating">En Yüksek Puan</option>
+        <option value="popular">En Popüler</option>
+      </select>
+    </div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
   <main id="main-content" role="main">
+    <!-- CUSTOMER TESTIMONIALS -->
+    <section class="testimonials-section">
+      <h2>Müşterilerimiz Ne Diyor?</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"Harika kalitede ürünler! Dans eden dino anahtarlığı çok sevimli, herkese hediye aldım."</p>
+          <div class="testimonial-author">
+            <strong>Ayşe K.</strong>
+            <span>Anahtarlık Alıcısı</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"Çerçeveler çok şık, ofisime mükemmel uydu. Hızlı teslimat ve güler yüzlü hizmet!"</p>
+          <div class="testimonial-author">
+            <strong>Mehmet Y.</strong>
+            <span>Çerçeve Alıcısı</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"Ev dekorasyon ürünleri tam aradığım gibiydi. Kaliteli baskı, uygun fiyat. Teşekkürler!"</p>
+          <div class="testimonial-author">
+            <strong>Zeynep A.</strong>
+            <span>Dekorasyon Alıcısı</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ANAHTARLIKLAR -->
     <section id="cat-anahtarlik" class="category" aria-labelledby="keys-heading">
       <h2 id="keys-heading">Anahtarlıklar</h2>
@@ -159,8 +226,24 @@
         </div>
       </div>
       
-      <h3 id="modalTitle"></h3>
+      <div class="modal-header">
+        <h3 id="modalTitle"></h3>
+        <button id="favoriteBtn" class="favorite-btn" aria-label="Favorilere ekle">
+          <span class="heart-icon">🤍</span>
+        </button>
+      </div>
+      
+      <div class="modal-rating">
+        <div class="stars" id="modalStars"></div>
+        <span id="modalRatingText"></span>
+      </div>
+      
       <p id="modalDesc"></p>
+      
+      <div class="modal-price">
+        <span class="price-label">Fiyat:</span>
+        <span id="modalPrice" class="price"></span>
+      </div>
       
       <div class="form-group">
         <label for="modalVar">Varyasyon:</label>
@@ -178,6 +261,22 @@
       </div>
       
       <button class="add-cart" id="addToCartBtn">Sepete Ekle</button>
+      
+      <!-- Social Share -->
+      <div class="social-share">
+        <button id="shareInstagram" class="share-btn instagram" aria-label="Instagram'da paylaş">
+          <span aria-hidden="true">📷</span> Instagram'da Paylaş
+        </button>
+        <button id="shareWhatsApp" class="share-btn whatsapp" aria-label="WhatsApp'ta paylaş">
+          <span aria-hidden="true">💬</span> WhatsApp
+        </button>
+      </div>
+      
+      <!-- Related Products -->
+      <div class="related-products">
+        <h4>Bunlar da İlginizi Çekebilir</h4>
+        <div id="relatedProductsGrid" class="related-grid"></div>
+      </div>
     </div>
   </div>
 
@@ -193,9 +292,37 @@
     <div class="cart-empty" id="cartEmpty" style="display: none;">
       <p>Sepetiniz boş</p>
     </div>
+    <div class="cart-summary" id="cartSummary" style="display: none;">
+      <div class="summary-row">
+        <span>Ara Toplam:</span>
+        <span id="cartSubtotal">0 ₺</span>
+      </div>
+      <div class="summary-row">
+        <span>Kargo:</span>
+        <span id="cartShipping">Ücretsiz</span>
+      </div>
+      <div class="summary-row total">
+        <span>Toplam:</span>
+        <span id="cartTotal">0 ₺</span>
+      </div>
+    </div>
     <button class="whatsapp" id="sendWhatsAppBtn">
       <span aria-hidden="true">📱</span> WhatsApp ile Sipariş
     </button>
+  </div>
+
+  <!-- FAVORITES DRAWER -->
+  <div id="favoritesDrawer" class="favorites-drawer" role="complementary" aria-label="Favoriler">
+    <div class="cart-header">
+      <h3>Favorilerim</h3>
+      <button id="closeFavorites" aria-label="Favorileri kapat">
+        <span aria-hidden="true">✕</span>
+      </button>
+    </div>
+    <div id="favoritesItems" role="list"></div>
+    <div class="cart-empty" id="favoritesEmpty" style="display: none;">
+      <p>Favori ürününüz yok</p>
+    </div>
   </div>
 
   <!-- Loading indicator -->
