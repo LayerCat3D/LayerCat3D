@@ -1,105 +1,208 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LayerCat3D</title>
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LayerCat3D - 3D baskı ürünleri. Anahtarlıklar, çerçeveler ve ev dekorasyon ürünleri.">
+  <meta name="keywords" content="3D baskı, anahtarlık, çerçeve, dekorasyon, LayerCat3D">
+  <meta name="author" content="LayerCat3D">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="LayerCat3D - Printing Purr-Fection">
+  <meta property="og:description" content="3D baskı ürünleri - Anahtarlıklar, çerçeveler ve ev dekorasyon">
+  <meta property="og:type" content="website">
+  
+  <title>LayerCat3D - Printing Purr-Fection | 3D Baskı Ürünleri</title>
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg">
 </head>
 
 <body class="dark">
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="skip-link">Ana içeriğe geç</a>
 
-<header class="header">
-  <div class="logo" onclick="location.reload()">
-    <img src="images/logo.jpg" alt="LayerCat3D">
-    <div class="logo-text">
-      <h1>LayerCat3D</h1>
-      <span>Printing Purr-Fection</span>
-    </div>
-  </div>
-
-  <nav>
-    <div class="dropdown">
-      <button onclick="toggleDropdown(event)">Ürünler ▾</button>
-      <div id="productDropdown" class="dropdown-menu">
-        <div onclick="scrollToCategory('anahtarlik')">Anahtarlıklar</div>
-        <div onclick="scrollToCategory('cerceve')">Çerçeveler</div>
-        <div onclick="scrollToCategory('ev')">Ev-Dekorasyon</div>
+  <header class="header" role="banner">
+    <div class="logo" role="button" tabindex="0" aria-label="Ana sayfaya dön">
+      <img src="images/logo.jpg" alt="LayerCat3D Logo">
+      <div class="logo-text">
+        <h1>LayerCat3D</h1>
+        <span>Printing Purr-Fection</span>
       </div>
     </div>
-    <button onclick="toggleTheme()">🌙 / ☀️</button>
-    <button class="cart-btn" onclick="toggleCart()">🛒 <span id="cartCount">0</span></button>
-  </nav>
-</header>
 
-<main>
-  <!-- ANAHTARLIKLAR -->
-  <section id="cat-anahtarlik" class="category">
-    <h2>Anahtarlıklar</h2>
-    <div class="scroll-container">
-      <button class="scroll-btn left" onclick="scrollLeft('keysGrid')">◀</button>
-      <div class="product-scroll" id="keysGrid"></div>
-      <button class="scroll-btn right" onclick="scrollRight('keysGrid')">▶</button>
-      <div class="scroll-hint">Kaydır →</div>
-    </div>
-  </section>
+    <nav role="navigation" aria-label="Ana menü">
+      <div class="dropdown">
+        <button 
+          id="productsMenuBtn"
+          aria-haspopup="true" 
+          aria-expanded="false"
+          aria-controls="productDropdown"
+          class="nav-button">
+          Ürünler 
+          <span aria-hidden="true">▾</span>
+        </button>
+        <div id="productDropdown" class="dropdown-menu" role="menu">
+          <button role="menuitem" data-category="anahtarlik">Anahtarlıklar</button>
+          <button role="menuitem" data-category="cerceve">Çerçeveler</button>
+          <button role="menuitem" data-category="ev">Ev-Dekorasyon</button>
+        </div>
+      </div>
+      <button 
+        id="themeToggle"
+        class="nav-button" 
+        aria-label="Tema değiştir">
+        <span class="theme-icon" aria-hidden="true">🌙</span>
+      </button>
+      <button 
+        id="cartToggle"
+        class="cart-btn nav-button" 
+        aria-label="Sepeti aç">
+        <span aria-hidden="true">🛒</span>
+        <span id="cartCount" class="cart-count">0</span>
+      </button>
+    </nav>
+  </header>
 
-  <!-- ÇERÇEVELER -->
-  <section id="cat-cerceve" class="category">
-    <h2>Çerçeveler</h2>
-    <div class="scroll-container">
-      <button class="scroll-btn left" onclick="scrollLeft('framesGrid')">◀</button>
-      <div class="product-scroll" id="framesGrid"></div>
-      <button class="scroll-btn right" onclick="scrollRight('framesGrid')">▶</button>
-      <div class="scroll-hint">Kaydır →</div>
-    </div>
-  </section>
+  <main id="main-content" role="main">
+    <!-- ANAHTARLIKLAR -->
+    <section id="cat-anahtarlik" class="category" aria-labelledby="keys-heading">
+      <h2 id="keys-heading">Anahtarlıklar</h2>
+      <div class="scroll-container">
+        <button 
+          class="scroll-btn left" 
+          data-grid="keysGrid"
+          data-direction="left"
+          aria-label="Sola kaydır">
+          <span aria-hidden="true">◀</span>
+        </button>
+        <div class="product-scroll" id="keysGrid" role="list"></div>
+        <button 
+          class="scroll-btn right" 
+          data-grid="keysGrid"
+          data-direction="right"
+          aria-label="Sağa kaydır">
+          <span aria-hidden="true">▶</span>
+        </button>
+        <div class="scroll-hint" aria-hidden="true">Kaydır →</div>
+      </div>
+    </section>
 
-  <!-- EV-DEKORASYON -->
-  <section id="cat-ev" class="category">
-    <h2>Ev-Dekorasyon</h2>
-    <div class="scroll-container">
-      <button class="scroll-btn left" onclick="scrollLeft('decorGrid')">◀</button>
-      <div class="product-scroll" id="decorGrid"></div>
-      <button class="scroll-btn right" onclick="scrollRight('decorGrid')">▶</button>
-      <div class="scroll-hint">Kaydır →</div>
-    </div>
-  </section>
-</main>
+    <!-- ÇERÇEVELER -->
+    <section id="cat-cerceve" class="category" aria-labelledby="frames-heading">
+      <h2 id="frames-heading">Çerçeveler</h2>
+      <div class="scroll-container">
+        <button 
+          class="scroll-btn left" 
+          data-grid="framesGrid"
+          data-direction="left"
+          aria-label="Sola kaydır">
+          <span aria-hidden="true">◀</span>
+        </button>
+        <div class="product-scroll" id="framesGrid" role="list"></div>
+        <button 
+          class="scroll-btn right" 
+          data-grid="framesGrid"
+          data-direction="right"
+          aria-label="Sağa kaydır">
+          <span aria-hidden="true">▶</span>
+        </button>
+        <div class="scroll-hint" aria-hidden="true">Kaydır →</div>
+      </div>
+    </section>
 
-<!-- PRODUCT MODAL -->
-<div id="productModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeProduct()">✕</span>
-    <img id="modalImg">
-    <div class="gallery-controls">
-      <button onclick="prevImage()">◀</button>
-      <button onclick="nextImage()">▶</button>
+    <!-- EV-DEKORASYON -->
+    <section id="cat-ev" class="category" aria-labelledby="decor-heading">
+      <h2 id="decor-heading">Ev-Dekorasyon</h2>
+      <div class="scroll-container">
+        <button 
+          class="scroll-btn left" 
+          data-grid="decorGrid"
+          data-direction="left"
+          aria-label="Sola kaydır">
+          <span aria-hidden="true">◀</span>
+        </button>
+        <div class="product-scroll" id="decorGrid" role="list"></div>
+        <button 
+          class="scroll-btn right" 
+          data-grid="decorGrid"
+          data-direction="right"
+          aria-label="Sağa kaydır">
+          <span aria-hidden="true">▶</span>
+        </button>
+        <div class="scroll-hint" aria-hidden="true">Kaydır →</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PRODUCT MODAL -->
+  <div id="productModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <button class="close" id="closeModal" aria-label="Kapat">
+        <span aria-hidden="true">✕</span>
+      </button>
+      
+      <div class="modal-image-container">
+        <img id="modalImg" alt="" loading="lazy">
+        <div class="gallery-controls">
+          <button id="prevImageBtn" aria-label="Önceki resim">
+            <span aria-hidden="true">◀</span>
+          </button>
+          <button id="nextImageBtn" aria-label="Sonraki resim">
+            <span aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </div>
+      
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      
+      <div class="form-group">
+        <label for="modalVar">Varyasyon:</label>
+        <select id="modalVar" aria-label="Varyasyon seçin"></select>
+      </div>
+      
+      <div class="qty" role="group" aria-label="Miktar seçimi">
+        <button id="decreaseQty" aria-label="Miktarı azalt">
+          <span aria-hidden="true">−</span>
+        </button>
+        <span id="modalQty" aria-live="polite">1</span>
+        <button id="increaseQty" aria-label="Miktarı artır">
+          <span aria-hidden="true">+</span>
+        </button>
+      </div>
+      
+      <button class="add-cart" id="addToCartBtn">Sepete Ekle</button>
     </div>
-    <h3 id="modalCode"></h3>
-    <p id="modalDesc"></p>
-    <label for="modalVar">Varyasyon:</label>
-    <select id="modalVar"></select>
-    <div class="qty">
-      <button onclick="changeModalQty(-1)">−</button>
-      <span id="modalQty">1</span>
-      <button onclick="changeModalQty(1)">+</button>
-    </div>
-    <button class="add-cart" onclick="addFromModal()">Sepete Ekle</button>
   </div>
-</div>
 
-<!-- CART DRAWER -->
-<div id="cartDrawer" class="cart-drawer">
-  <div class="cart-header">
-    <h3>Sepet</h3>
-    <button onclick="toggleCart()">✕</button>
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" class="cart-drawer" role="complementary" aria-label="Alışveriş sepeti">
+    <div class="cart-header">
+      <h3>Sepet</h3>
+      <button id="closeCart" aria-label="Sepeti kapat">
+        <span aria-hidden="true">✕</span>
+      </button>
+    </div>
+    <div id="cartItems" role="list"></div>
+    <div class="cart-empty" id="cartEmpty" style="display: none;">
+      <p>Sepetiniz boş</p>
+    </div>
+    <button class="whatsapp" id="sendWhatsAppBtn">
+      <span aria-hidden="true">📱</span> WhatsApp ile Sipariş
+    </button>
   </div>
-  <div id="cartItems"></div>
-  <button class="whatsapp" onclick="sendWhatsApp()">WhatsApp ile Sipariş</button>
-</div>
 
-<script src="script.js"></script>
+  <!-- Loading indicator -->
+  <div id="loadingIndicator" class="loading" style="display: none;" aria-live="polite">
+    <span>Yükleniyor...</span>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
