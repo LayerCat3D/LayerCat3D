@@ -1,6 +1,6 @@
 /**
- * LayerCat3D - E-commerce Website
- * Improved version with better organization, error handling, and accessibility
+ * LayerCat3D - Enhanced E-commerce Website
+ * Features: Pricing, Search, Filtering, Ratings, Favorites, Testimonials, Related Products
  */
 
 // ============================================
@@ -8,6 +8,7 @@
 // ============================================
 const AppState = {
   cart: {},
+  favorites: new Set(),
   modal: {
     qty: 1,
     code: "",
@@ -15,11 +16,16 @@ const AppState = {
   },
   ui: {
     dropdownOpen: false
+  },
+  filters: {
+    search: "",
+    category: "all",
+    sort: "default"
   }
 };
 
 // ============================================
-// PRODUCT DATA
+// PRODUCT DATA WITH PRICING AND RATINGS
 // ============================================
 const ProductData = {
   generateProducts() {
@@ -30,28 +36,79 @@ const ProductData = {
       const code = `LC${i}`;
       products[code] = {
         imgs: [`images/${code}-1.jpg`, `images/${code}-2.jpg`],
-        desc: `Anahtarlık ${i} açıklama`,
-        vars: ["Küçük", "Büyük"],
-        category: "anahtarlik"
+        desc: `Yüksek kaliteli 3D baskı anahtarlık. Dayanıklı PLA malzemeden üretilmiştir.`,
+        vars: [
+          { name: "Küçük (8cm)", price: 100 },
+          { name: "Büyük (15cm)", price: 150 }
+        ],
+        category: "anahtarlik",
+        rating: 4.5 + Math.random() * 0.5,
+        reviews: Math.floor(Math.random() * 50) + 10,
+        popular: i <= 110,
+        new: i >= 145
       };
     }
     
-    // Custom product example
+    // Featured products with custom data
     products["LC101"] = {
       imgs: ["images/LC101-1.jpg", "images/LC101-2.jpg"],
-      desc: "Dans Eden Dino Anahtarlık",
-      vars: ["8cm", "15cm"],
-      category: "anahtarlik"
+      desc: "Müzik Dinleyen Dino Anahtarlık - En sevilen ürünümüz! Eğlenceli tasarımı ve parlak renkleriyle çocuklar ve yetişkinler için mükemmel bir hediye.",
+      vars: [
+        { name: "Küçük (8cm)", price: 100 },
+        { name: "Büyük (15cm)", price: 150 }
+      ],
+      category: "anahtarlik",
+      rating: 4.9,
+      reviews: 127,
+      popular: true,
+      new: false
     };
     
+    products["LC102"] = {
+      imgs: ["images/LC102-1.jpg", "images/LC102-2.jpg"],
+      desc: "Minecraft Kalpli Clicker Anahtarlık - Minecraft Hayranları için özel tasarım. Detaylı ve yüksek baskı kalitesi.",
+      vars: [
+        { name: "Küçük (8cm)", price: 50 },
+        { name: "Büyük (15cm)", price: 75 }
+      ],
+      category: "anahtarlik",
+      rating: 4.7,
+      reviews: 89,
+      popular: true,
+      new: false
+    };
+
+ products["LC103"] = {
+      imgs: ["images/LC103-1.jpg", "images/LC103-2.jpg"],
+      desc: "Kalpli Avokado Clicker Anahtarlık - Avokado sevenler için şirin ve özel tasarım. Detaylı ve yüksek baskı kalitesi.",
+      vars: [
+        { name: "Küçük (8cm)", price: 50 },
+        { name: "Büyük (15cm)", price: 75 }
+      ],
+      category: "anahtarlik",
+      rating: 4.9,
+      reviews: 513,
+      popular: true,
+      new: false
+    };    
+
     // Çerçeveler (LC201-LC205)
     for (let i = 201; i <= 205; i++) {
       const code = `LC${i}`;
       products[code] = {
         imgs: [`images/${code}-1.jpg`, `images/${code}-2.jpg`],
-        desc: `Çerçeve ${i} açıklama`,
-        vars: ["Siyah", "Beyaz"],
-        category: "cerceve"
+        desc: `Şık ve modern tasarımlı 3D baskı çerçeve. Duvarlarınızı süslemek için ideal.`,
+        vars: [
+          { name: "Siyah (20x25cm)", price: 120 },
+          { name: "Beyaz (20x25cm)", price: 120 },
+          { name: "Siyah (30x40cm)", price: 180 },
+          { name: "Beyaz (30x40cm)", price: 180 }
+        ],
+        category: "cerceve",
+        rating: 4.3 + Math.random() * 0.5,
+        reviews: Math.floor(Math.random() * 30) + 5,
+        popular: false,
+        new: i >= 204
       };
     }
     
@@ -60,9 +117,16 @@ const ProductData = {
       const code = `LC${i}`;
       products[code] = {
         imgs: [`images/${code}-1.jpg`, `images/${code}-2.jpg`],
-        desc: `Ev-dekorasyon ${i} açıklama`,
-        vars: ["Ahşap", "Plastik"],
-        category: "ev"
+        desc: `Özel tasarım ev dekorasyon ürünü. Evinize modern bir dokunuş katın.`,
+        vars: [
+          { name: "Ahşap Görünüm", price: 95 },
+          { name: "Plastik (Renkli)", price: 85 }
+        ],
+        category: "ev",
+        rating: 4.2 + Math.random() * 0.6,
+        reviews: Math.floor(Math.random() * 40) + 8,
+        popular: i <= 305,
+        new: i >= 320
       };
     }
     
@@ -76,9 +140,6 @@ const products = ProductData.generateProducts();
 // UTILITY FUNCTIONS
 // ============================================
 const Utils = {
-  /**
-   * Get element safely with error handling
-   */
   getElement(id) {
     const element = document.getElementById(id);
     if (!element) {
@@ -87,9 +148,6 @@ const Utils = {
     return element;
   },
   
-  /**
-   * Safely update text content
-   */
   setText(id, text) {
     const element = this.getElement(id);
     if (element) {
@@ -97,9 +155,6 @@ const Utils = {
     }
   },
   
-  /**
-   * Safely update HTML content
-   */
   setHTML(id, html) {
     const element = this.getElement(id);
     if (element) {
@@ -107,9 +162,6 @@ const Utils = {
     }
   },
   
-  /**
-   * Toggle class on element
-   */
   toggleClass(id, className, force) {
     const element = this.getElement(id);
     if (element) {
@@ -117,9 +169,6 @@ const Utils = {
     }
   },
   
-  /**
-   * Smooth scroll to element
-   */
   scrollTo(elementId) {
     const element = this.getElement(elementId);
     if (element) {
@@ -127,9 +176,6 @@ const Utils = {
     }
   },
   
-  /**
-   * Save to localStorage with error handling
-   */
   saveToStorage(key, value) {
     try {
       localStorage.setItem(key, JSON.stringify(value));
@@ -138,9 +184,6 @@ const Utils = {
     }
   },
   
-  /**
-   * Load from localStorage with error handling
-   */
   loadFromStorage(key, defaultValue = null) {
     try {
       const item = localStorage.getItem(key);
@@ -149,6 +192,25 @@ const Utils = {
       console.error('Failed to load from localStorage:', error);
       return defaultValue;
     }
+  },
+  
+  formatPrice(price) {
+    return `${price} ₺`;
+  },
+  
+  renderStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    let stars = '';
+    
+    for (let i = 0; i < fullStars; i++) {
+      stars += '⭐';
+    }
+    if (hasHalfStar) {
+      stars += '⭐';
+    }
+    
+    return stars;
   }
 };
 
@@ -180,6 +242,147 @@ const ThemeManager = {
 };
 
 // ============================================
+// SEARCH & FILTER
+// ============================================
+const SearchFilter = {
+  init() {
+    const searchInput = Utils.getElement('searchInput');
+    const clearSearch = Utils.getElement('clearSearch');
+    const categoryFilter = Utils.getElement('categoryFilter');
+    const sortFilter = Utils.getElement('sortFilter');
+    
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        AppState.filters.search = e.target.value.toLowerCase();
+        this.updateClearButton();
+        this.filterProducts();
+      });
+    }
+    
+    if (clearSearch) {
+      clearSearch.addEventListener('click', () => {
+        if (searchInput) {
+          searchInput.value = '';
+          AppState.filters.search = '';
+          this.updateClearButton();
+          this.filterProducts();
+          searchInput.focus();
+        }
+      });
+    }
+    
+    if (categoryFilter) {
+      categoryFilter.addEventListener('change', (e) => {
+        AppState.filters.category = e.target.value;
+        this.filterProducts();
+      });
+    }
+    
+    if (sortFilter) {
+      sortFilter.addEventListener('change', (e) => {
+        AppState.filters.sort = e.target.value;
+        this.filterProducts();
+      });
+    }
+  },
+  
+  updateClearButton() {
+    const clearBtn = Utils.getElement('clearSearch');
+    if (clearBtn) {
+      clearBtn.style.display = AppState.filters.search ? 'flex' : 'none';
+    }
+  },
+  
+  filterProducts() {
+    const { search, category, sort } = AppState.filters;
+    
+    // Get all product cards
+    const allCards = document.querySelectorAll('.product-card');
+    let visibleCount = 0;
+    
+    // Create array of cards with their data for sorting
+    const cardsWithData = Array.from(allCards).map(card => {
+      const code = card.dataset.code;
+      const product = products[code];
+      return { card, code, product };
+    });
+    
+    // Filter
+    const filtered = cardsWithData.filter(({ code, product }) => {
+      if (!product) return false;
+      
+      // Category filter
+      if (category !== 'all' && product.category !== category) {
+        return false;
+      }
+      
+      // Search filter
+      if (search) {
+        const searchLower = search.toLowerCase();
+        const codeMatch = code.toLowerCase().includes(searchLower);
+        const descMatch = product.desc.toLowerCase().includes(searchLower);
+        const categoryMatch = product.category.toLowerCase().includes(searchLower);
+        
+        if (!codeMatch && !descMatch && !categoryMatch) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
+    
+    // Sort
+    if (sort === 'price-low') {
+      filtered.sort((a, b) => {
+        const priceA = Math.min(...a.product.vars.map(v => v.price));
+        const priceB = Math.min(...b.product.vars.map(v => v.price));
+        return priceA - priceB;
+      });
+    } else if (sort === 'price-high') {
+      filtered.sort((a, b) => {
+        const priceA = Math.max(...a.product.vars.map(v => v.price));
+        const priceB = Math.max(...b.product.vars.map(v => v.price));
+        return priceB - priceA;
+      });
+    } else if (sort === 'rating') {
+      filtered.sort((a, b) => b.product.rating - a.product.rating);
+    } else if (sort === 'popular') {
+      filtered.sort((a, b) => {
+        if (a.product.popular && !b.product.popular) return -1;
+        if (!a.product.popular && b.product.popular) return 1;
+        return b.product.reviews - a.product.reviews;
+      });
+    }
+    
+    // Hide all cards first
+    allCards.forEach(card => {
+      card.style.display = 'none';
+    });
+    
+    // Show filtered cards in sorted order
+    filtered.forEach(({ card }, index) => {
+      card.style.display = 'flex';
+      card.style.order = index;
+      visibleCount++;
+    });
+    
+    // Update search results text
+    this.updateSearchResults(visibleCount, allCards.length);
+  },
+  
+  updateSearchResults(visible, total) {
+    const resultsDiv = Utils.getElement('searchResults');
+    if (resultsDiv) {
+      if (AppState.filters.search || AppState.filters.category !== 'all') {
+        resultsDiv.textContent = `${visible} ürün gösteriliyor (toplam ${total})`;
+      } else {
+        resultsDiv.textContent = '';
+      }
+    }
+  }
+};
+
+// ============================================
 // NAVIGATION & DROPDOWN
 // ============================================
 const Navigation = {
@@ -194,19 +397,35 @@ const Navigation = {
       });
     }
     
-    // Close dropdown when clicking outside
     document.addEventListener('click', () => {
       this.closeDropdown();
     });
     
-    // Handle dropdown menu items
     if (dropdown) {
       const menuItems = dropdown.querySelectorAll('[role="menuitem"]');
       menuItems.forEach(item => {
         item.addEventListener('click', () => {
           const category = item.dataset.category;
           if (category) {
-            this.scrollToCategory(category);
+            if (category === 'all') {
+              // Reset filters and scroll to top
+              const categoryFilter = Utils.getElement('categoryFilter');
+              if (categoryFilter) {
+                categoryFilter.value = 'all';
+                AppState.filters.category = 'all';
+                SearchFilter.filterProducts();
+              }
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              // Set category filter and scroll to category
+              const categoryFilter = Utils.getElement('categoryFilter');
+              if (categoryFilter) {
+                categoryFilter.value = category;
+                AppState.filters.category = category;
+                SearchFilter.filterProducts();
+              }
+              this.scrollToCategory(category);
+            }
             this.closeDropdown();
           }
         });
@@ -248,6 +467,154 @@ const Navigation = {
 };
 
 // ============================================
+// FAVORITES MANAGEMENT
+// ============================================
+const FavoritesManager = {
+  init() {
+    const favToggle = Utils.getElement('favoritesToggle');
+    const closeFav = Utils.getElement('closeFavorites');
+    
+    if (favToggle) favToggle.addEventListener('click', () => this.toggle());
+    if (closeFav) closeFav.addEventListener('click', () => this.close());
+    
+    // Load favorites from localStorage
+    const savedFavorites = Utils.loadFromStorage('favorites', []);
+    AppState.favorites = new Set(savedFavorites);
+    this.updateCount();
+  },
+  
+  toggle() {
+    const drawer = Utils.getElement('favoritesDrawer');
+    if (drawer) {
+      drawer.classList.toggle('open');
+      if (drawer.classList.contains('open')) {
+        this.render();
+      }
+    }
+  },
+  
+  open() {
+    Utils.toggleClass('favoritesDrawer', 'open', true);
+    this.render();
+  },
+  
+  close() {
+    Utils.toggleClass('favoritesDrawer', 'open', false);
+  },
+  
+  add(productCode) {
+    AppState.favorites.add(productCode);
+    this.save();
+    this.updateCount();
+    this.updateFavoriteButtons();
+  },
+  
+  remove(productCode) {
+    AppState.favorites.delete(productCode);
+    this.save();
+    this.updateCount();
+    this.updateFavoriteButtons();
+    this.render();
+  },
+  
+  toggleFavorite(productCode) {
+    if (AppState.favorites.has(productCode)) {
+      this.remove(productCode);
+    } else {
+      this.add(productCode);
+    }
+  },
+  
+  save() {
+    Utils.saveToStorage('favorites', Array.from(AppState.favorites));
+  },
+  
+  updateCount() {
+    Utils.setText('favoritesCount', AppState.favorites.size);
+  },
+  
+  updateFavoriteButtons() {
+    // Update product card favorite buttons
+    document.querySelectorAll('.product-favorite').forEach(btn => {
+      const code = btn.dataset.code;
+      const isFavorite = AppState.favorites.has(code);
+      btn.classList.toggle('active', isFavorite);
+      btn.textContent = isFavorite ? '❤️' : '🤍';
+    });
+    
+    // Update modal favorite button
+    const modalBtn = Utils.getElement('favoriteBtn');
+    if (modalBtn && AppState.modal.code) {
+      const isFavorite = AppState.favorites.has(AppState.modal.code);
+      modalBtn.classList.toggle('active', isFavorite);
+      const icon = modalBtn.querySelector('.heart-icon');
+      if (icon) {
+        icon.textContent = isFavorite ? '❤️' : '🤍';
+      }
+    }
+  },
+  
+  render() {
+    const favItems = Utils.getElement('favoritesItems');
+    const favEmpty = Utils.getElement('favoritesEmpty');
+    
+    if (!favItems) return;
+    
+    favItems.innerHTML = '';
+    
+    if (AppState.favorites.size === 0) {
+      if (favEmpty) favEmpty.style.display = 'block';
+      return;
+    }
+    
+    if (favEmpty) favEmpty.style.display = 'none';
+    
+    AppState.favorites.forEach(code => {
+      const product = products[code];
+      if (!product) return;
+      
+      const minPrice = Math.min(...product.vars.map(v => v.price));
+      
+      const item = document.createElement('div');
+      item.className = 'favorite-item';
+      item.setAttribute('role', 'listitem');
+      
+      item.innerHTML = `
+        <img src="${product.imgs[0]}" alt="${code}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22%3E%3Crect fill=%22%23f0f0f0%22 width=%2270%22 height=%2270%22/%3E%3C/svg%3E'">
+        <div class="favorite-item-info">
+          <div class="cart-item-name">${code}</div>
+          <div class="cart-item-price">${Utils.formatPrice(minPrice)}+</div>
+          <div class="product-card-rating">
+            <span class="stars">${Utils.renderStars(product.rating)}</span>
+          </div>
+        </div>
+        <div class="favorite-item-actions">
+          <button data-code="${code}" data-action="view">Görüntüle</button>
+          <button data-code="${code}" data-action="remove">Kaldır</button>
+        </div>
+      `;
+      
+      favItems.appendChild(item);
+    });
+    
+    // Add event listeners
+    favItems.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const code = e.target.dataset.code;
+        const action = e.target.dataset.action;
+        
+        if (action === 'remove') {
+          this.remove(code);
+        } else if (action === 'view') {
+          ProductModal.open(code);
+          this.close();
+        }
+      });
+    });
+  }
+};
+
+// ============================================
 // PRODUCT MODAL
 // ============================================
 const ProductModal = {
@@ -259,6 +626,10 @@ const ProductModal = {
     const decreaseBtn = Utils.getElement('decreaseQty');
     const increaseBtn = Utils.getElement('increaseQty');
     const modal = Utils.getElement('productModal');
+    const favoriteBtn = Utils.getElement('favoriteBtn');
+    const shareInstagram = Utils.getElement('shareInstagram');
+    const shareWhatsApp = Utils.getElement('shareWhatsApp');
+    const varSelect = Utils.getElement('modalVar');
     
     if (closeBtn) closeBtn.addEventListener('click', () => this.close());
     if (addToCartBtn) addToCartBtn.addEventListener('click', () => this.addToCart());
@@ -266,6 +637,14 @@ const ProductModal = {
     if (nextBtn) nextBtn.addEventListener('click', () => this.nextImage());
     if (decreaseBtn) decreaseBtn.addEventListener('click', () => this.changeQty(-1));
     if (increaseBtn) increaseBtn.addEventListener('click', () => this.changeQty(1));
+    if (favoriteBtn) favoriteBtn.addEventListener('click', () => this.toggleFavorite());
+    if (shareInstagram) shareInstagram.addEventListener('click', () => this.shareToInstagram());
+    if (shareWhatsApp) shareWhatsApp.addEventListener('click', () => this.shareProductWhatsApp());
+    
+    // Update price when variant changes
+    if (varSelect) {
+      varSelect.addEventListener('change', () => this.updatePrice());
+    }
     
     // Close modal on ESC key
     document.addEventListener('keydown', (e) => {
@@ -302,8 +681,6 @@ const ProductModal = {
     if (modalImg) {
       modalImg.src = product.imgs[0];
       modalImg.alt = `${productCode} - Ürün görseli`;
-      
-      // Handle image load error
       modalImg.onerror = () => {
         modalImg.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Crect fill="%23f0f0f0" width="300" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999"%3EGörsel yüklenemedi%3C/text%3E%3C/svg%3E';
       };
@@ -313,22 +690,36 @@ const ProductModal = {
     Utils.setText('modalDesc', product.desc);
     Utils.setText('modalQty', '1');
     
-    // Populate variants
+    // Rating
+    const modalStars = Utils.getElement('modalStars');
+    if (modalStars) {
+      modalStars.textContent = Utils.renderStars(product.rating);
+    }
+    Utils.setText('modalRatingText', `(${product.reviews} değerlendirme)`);
+    
+    // Populate variants and show price
     const varSelect = Utils.getElement('modalVar');
     if (varSelect) {
       varSelect.innerHTML = '';
-      product.vars.forEach(variant => {
+      product.vars.forEach((variant, index) => {
         const option = document.createElement('option');
-        option.value = variant;
-        option.textContent = variant;
+        option.value = index;
+        option.textContent = `${variant.name} - ${Utils.formatPrice(variant.price)}`;
         varSelect.appendChild(option);
       });
     }
     
+    this.updatePrice();
+    
+    // Update favorite button
+    FavoritesManager.updateFavoriteButtons();
+    
+    // Show related products
+    this.showRelatedProducts(productCode);
+    
     // Show modal
     Utils.toggleClass('productModal', 'open', true);
     
-    // Set focus to close button for accessibility
     const closeBtn = Utils.getElement('closeModal');
     if (closeBtn) {
       setTimeout(() => closeBtn.focus(), 100);
@@ -337,6 +728,20 @@ const ProductModal = {
   
   close() {
     Utils.toggleClass('productModal', 'open', false);
+  },
+  
+  updatePrice() {
+    const product = products[AppState.modal.code];
+    if (!product) return;
+    
+    const varSelect = Utils.getElement('modalVar');
+    if (varSelect) {
+      const variantIndex = parseInt(varSelect.value);
+      const variant = product.vars[variantIndex];
+      if (variant) {
+        Utils.setText('modalPrice', Utils.formatPrice(variant.price));
+      }
+    }
   },
   
   changeQty(delta) {
@@ -370,21 +775,86 @@ const ProductModal = {
     }
   },
   
+  toggleFavorite() {
+    FavoritesManager.toggleFavorite(AppState.modal.code);
+  },
+  
   addToCart() {
+    const product = products[AppState.modal.code];
+    if (!product) return;
+    
     const varSelect = Utils.getElement('modalVar');
     if (!varSelect) return;
     
-    const variant = varSelect.value;
-    const key = `${AppState.modal.code}-${variant}`;
+    const variantIndex = parseInt(varSelect.value);
+    const variant = product.vars[variantIndex];
+    const key = `${AppState.modal.code}-${variant.name}`;
     
-    AppState.cart[key] = (AppState.cart[key] || 0) + AppState.modal.qty;
+    if (!AppState.cart[key]) {
+      AppState.cart[key] = {
+        code: AppState.modal.code,
+        variant: variant.name,
+        price: variant.price,
+        qty: 0
+      };
+    }
+    
+    AppState.cart[key].qty += AppState.modal.qty;
     
     this.close();
     CartManager.render();
     CartManager.open();
     
-    // Save cart to localStorage
     Utils.saveToStorage('cart', AppState.cart);
+  },
+  
+  shareToInstagram() {
+    const product = products[AppState.modal.code];
+    if (!product) return;
+    
+    // Open Instagram profile
+    window.open('https://www.instagram.com/LayerCat3D/', '_blank');
+  },
+  
+  shareProductWhatsApp() {
+    const product = products[AppState.modal.code];
+    if (!product) return;
+    
+    const message = `LayerCat3D'den ${AppState.modal.code} ürününe göz atmanı öneririm! 🐱\n\n${product.desc}\n\nDetaylar için: ${window.location.href}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+  },
+  
+  showRelatedProducts(currentCode) {
+    const product = products[currentCode];
+    if (!product) return;
+    
+    const relatedGrid = Utils.getElement('relatedProductsGrid');
+    if (!relatedGrid) return;
+    
+    relatedGrid.innerHTML = '';
+    
+    // Find products in same category
+    const related = Object.entries(products)
+      .filter(([code, p]) => 
+        code !== currentCode && 
+        p.category === product.category
+      )
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+    
+    related.forEach(([code, p]) => {
+      const div = document.createElement('div');
+      div.className = 'related-product';
+      div.innerHTML = `
+        <img src="${p.imgs[0]}" alt="${code}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E'">
+        <div class="related-product-title">${code}</div>
+      `;
+      div.addEventListener('click', () => {
+        this.close();
+        setTimeout(() => this.open(code), 100);
+      });
+      relatedGrid.appendChild(div);
+    });
   }
 };
 
@@ -425,48 +895,54 @@ const CartManager = {
   render() {
     const cartItems = Utils.getElement('cartItems');
     const cartEmpty = Utils.getElement('cartEmpty');
+    const cartSummary = Utils.getElement('cartSummary');
     
     if (!cartItems) return;
     
     cartItems.innerHTML = '';
     let totalCount = 0;
+    let subtotal = 0;
     const entries = Object.entries(AppState.cart);
     
     if (entries.length === 0) {
       if (cartEmpty) cartEmpty.style.display = 'block';
+      if (cartSummary) cartSummary.style.display = 'none';
       Utils.setText('cartCount', '0');
       return;
     }
     
     if (cartEmpty) cartEmpty.style.display = 'none';
+    if (cartSummary) cartSummary.style.display = 'block';
     
-    entries.forEach(([key, qty]) => {
-      totalCount += qty;
-      const [code] = key.split('-');
-      const product = products[code];
+    entries.forEach(([key, item]) => {
+      totalCount += item.qty;
+      subtotal += item.price * item.qty;
       
+      const product = products[item.code];
       if (!product) return;
       
-      const item = document.createElement('div');
-      item.className = 'cart-item';
-      item.setAttribute('role', 'listitem');
+      const cartItemDiv = document.createElement('div');
+      cartItemDiv.className = 'cart-item';
+      cartItemDiv.setAttribute('role', 'listitem');
       
-      item.innerHTML = `
-        <img src="${product.imgs[0]}" alt="${key}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23f0f0f0%22 width=%2260%22 height=%2260%22/%3E%3C/svg%3E'">
+      cartItemDiv.innerHTML = `
+        <img src="${product.imgs[0]}" alt="${key}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22%3E%3Crect fill=%22%23f0f0f0%22 width=%2270%22 height=%2270%22/%3E%3C/svg%3E'">
         <div class="cart-item-info">
-          <div class="cart-item-name">${key}</div>
+          <div class="cart-item-name">${item.code}</div>
+          <div class="cart-item-price">${Utils.formatPrice(item.price)}</div>
+          <div style="font-size: 12px; color: var(--text-secondary)">${item.variant}</div>
           <div class="qty-drawer">
             <button data-key="${key}" data-action="decrease" aria-label="Azalt">−</button>
-            <span>${qty}</span>
+            <span>${item.qty}</span>
             <button data-key="${key}" data-action="increase" aria-label="Artır">+</button>
           </div>
         </div>
       `;
       
-      cartItems.appendChild(item);
+      cartItems.appendChild(cartItemDiv);
     });
     
-    // Add event listeners to quantity buttons
+    // Add event listeners
     cartItems.querySelectorAll('button').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const key = e.target.dataset.key;
@@ -476,13 +952,22 @@ const CartManager = {
       });
     });
     
+    // Update summary
+    const shipping = subtotal >= 200 ? 0 : 30;
+    const total = subtotal + shipping;
+    
+    Utils.setText('cartSubtotal', Utils.formatPrice(subtotal));
+    Utils.setText('cartShipping', shipping === 0 ? 'Ücretsiz' : Utils.formatPrice(shipping));
+    Utils.setText('cartTotal', Utils.formatPrice(total));
     Utils.setText('cartCount', totalCount);
   },
   
   changeQty(key, delta) {
-    AppState.cart[key] = (AppState.cart[key] || 0) + delta;
+    if (!AppState.cart[key]) return;
     
-    if (AppState.cart[key] <= 0) {
+    AppState.cart[key].qty += delta;
+    
+    if (AppState.cart[key].qty <= 0) {
       delete AppState.cart[key];
     }
     
@@ -496,13 +981,22 @@ const CartManager = {
       return;
     }
     
-    let message = 'Merhaba, sipariş vermek istiyorum:%0A%0A';
+    let message = 'Merhaba LayerCat3D! Sipariş vermek istiyorum:%0A%0A';
+    let total = 0;
     
-    Object.entries(AppState.cart).forEach(([key, qty]) => {
-      message += `${key} x ${qty}%0A`;
+    Object.entries(AppState.cart).forEach(([key, item]) => {
+      const itemTotal = item.price * item.qty;
+      total += itemTotal;
+      message += `${item.code} - ${item.variant} x ${item.qty} = ${Utils.formatPrice(itemTotal)}%0A`;
     });
     
-    message += '%0ATeşekkürler!';
+    const shipping = total >= 200 ? 0 : 30;
+    const grandTotal = total + shipping;
+    
+    message += `%0AAra Toplam: ${Utils.formatPrice(total)}%0A`;
+    message += `Kargo: ${shipping === 0 ? 'Ücretsiz' : Utils.formatPrice(shipping)}%0A`;
+    message += `%0AToplam: ${Utils.formatPrice(grandTotal)}%0A`;
+    message += `%0ATeşekkürler! 🐱`;
     
     const phoneNumber = '905439287380';
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
@@ -538,6 +1032,9 @@ const ProductRenderer = {
         decorGrid.appendChild(card);
       }
     });
+    
+    // Initialize favorites display
+    FavoritesManager.updateFavoriteButtons();
   },
   
   createProductCard(code, product) {
@@ -546,28 +1043,53 @@ const ProductRenderer = {
     card.setAttribute('role', 'listitem');
     card.setAttribute('tabindex', '0');
     card.setAttribute('aria-label', `${code} ürünü`);
+    card.dataset.code = code;
     
-    const img = document.createElement('img');
-    img.src = product.imgs[0];
-    img.alt = `${code} ürün görseli`;
-    img.loading = 'lazy';
+    const minPrice = Math.min(...product.vars.map(v => v.price));
+    const maxPrice = Math.max(...product.vars.map(v => v.price));
+    const priceText = minPrice === maxPrice 
+      ? Utils.formatPrice(minPrice)
+      : `${Utils.formatPrice(minPrice)}+`;
+    
+    card.innerHTML = `
+      <div class="product-card-image">
+        <img src="${product.imgs[0]}" alt="${code} ürün görseli" loading="lazy">
+        ${product.new ? '<span class="product-badge new">Yeni</span>' : ''}
+        ${product.popular ? '<span class="product-badge popular">Popüler</span>' : ''}
+        <button class="product-favorite" data-code="${code}" aria-label="Favorilere ekle">
+          🤍
+        </button>
+      </div>
+      <div class="product-card-content">
+        <div class="product-card-title">${code}</div>
+        <div class="product-card-rating">
+          <span class="stars">${Utils.renderStars(product.rating)}</span>
+          <span class="rating-text">(${product.reviews})</span>
+        </div>
+        <div class="product-card-price">
+          ${product.vars.length > 1 ? '<span class="product-card-price-from">den itibaren</span><br>' : ''}
+          ${priceText}
+        </div>
+      </div>
+    `;
     
     // Handle image load error
-    img.onerror = () => {
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'product-card-error';
-      errorDiv.textContent = 'Görsel yüklenemedi';
-      img.replaceWith(errorDiv);
-    };
+    const img = card.querySelector('img');
+    if (img) {
+      img.onerror = () => {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'product-card-error';
+        errorDiv.textContent = 'Görsel yüklenemedi';
+        img.replaceWith(errorDiv);
+      };
+    }
     
-    const label = document.createElement('span');
-    label.textContent = code;
-    
-    card.appendChild(img);
-    card.appendChild(label);
-    
-    // Click handler
-    card.addEventListener('click', () => ProductModal.open(code));
+    // Product card click handler (excluding favorite button)
+    card.addEventListener('click', (e) => {
+      if (!e.target.closest('.product-favorite')) {
+        ProductModal.open(code);
+      }
+    });
     
     // Keyboard handler
     card.addEventListener('keydown', (e) => {
@@ -576,6 +1098,15 @@ const ProductRenderer = {
         ProductModal.open(code);
       }
     });
+    
+    // Favorite button handler
+    const favBtn = card.querySelector('.product-favorite');
+    if (favBtn) {
+      favBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        FavoritesManager.toggleFavorite(code);
+      });
+    }
     
     return card;
   }
@@ -596,7 +1127,6 @@ const ScrollControls = {
       });
     });
     
-    // Auto-scroll
     this.startAutoScroll();
   },
   
@@ -621,14 +1151,11 @@ const ScrollControls = {
         const grid = Utils.getElement(gridId);
         if (!grid) return;
         
-        // Check if scrolled to end
         const isAtEnd = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 10;
         
         if (isAtEnd) {
-          // Reset to start
           grid.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
-          // Continue scrolling
           this.scroll(gridId, 'right');
         }
       });
@@ -662,16 +1189,18 @@ const LogoHandler = {
 // ============================================
 const App = {
   init() {
-    // Initialize all modules
     ThemeManager.init();
     Navigation.init();
+    SearchFilter.init();
+    FavoritesManager.init();
     ProductModal.init();
     CartManager.init();
     ProductRenderer.init();
     ScrollControls.init();
     LogoHandler.init();
     
-    console.log('LayerCat3D initialized successfully');
+    console.log('LayerCat3D Enhanced initialized successfully');
+    console.log(`Loaded ${Object.keys(products).length} products`);
   }
 };
 
@@ -682,7 +1211,7 @@ if (document.readyState === 'loading') {
   App.init();
 }
 
-// Export for potential testing or external use
+// Export for potential testing
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { App, AppState, products };
 }
