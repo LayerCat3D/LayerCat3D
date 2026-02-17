@@ -31,8 +31,8 @@ const ProductData = {
   generateProducts() {
     const products = {};
     
-    // Anahtarlıklar (LC101-LC150)
-    for (let i = 101; i <= 150; i++) {
+    // Anahtarlıklar (LC101-LC109)
+    for (let i = 101; i <= 109; i++) {
       const code = `LC${i}`;
       products[code] = {
         imgs: [`images/${code}-1.jpg`, `images/${code}-2.jpg`],
@@ -112,8 +112,8 @@ const ProductData = {
       };
     }
     
-    // Ev-dekorasyon (LC301-LC325)
-    for (let i = 301; i <= 325; i++) {
+    // Ev-dekorasyon (LC301-LC314)
+    for (let i = 301; i <= 314; i++) {
       const code = `LC${i}`;
       products[code] = {
         imgs: [`images/${code}-1.jpg`, `images/${code}-2.jpg`],
@@ -953,7 +953,7 @@ const CartManager = {
     });
     
     // Update summary
-    const shipping = subtotal >= 200 ? 0 : 30;
+    const shipping = subtotal >= 399 ? 0 : 100;
     const total = subtotal + shipping;
     
     Utils.setText('cartSubtotal', Utils.formatPrice(subtotal));
@@ -990,7 +990,7 @@ const CartManager = {
       message += `${item.code} - ${item.variant} x ${item.qty} = ${Utils.formatPrice(itemTotal)}%0A`;
     });
     
-    const shipping = total >= 200 ? 0 : 30;
+    const shipping = total >= 399 ? 0 : 100;
     const grandTotal = total + shipping;
     
     message += `%0AAra Toplam: ${Utils.formatPrice(total)}%0A`;
@@ -1215,3 +1215,4 @@ if (document.readyState === 'loading') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { App, AppState, products };
 }
+
