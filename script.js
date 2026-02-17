@@ -32,7 +32,7 @@ const ProductData = {
     const products = {};
     
     // Anahtarlıklar (LC101-LC109)
-    for (let i = 101; i <= 111; i++) {
+    for (let i = 101; i <= 109; i++) {
       const code = `LC${i}`;
       products[code] = {
         imgs: [`images/${code}-1.jpg`, `images/${code}-2.jpg`],
@@ -54,8 +54,8 @@ const ProductData = {
       imgs: ["images/LC101-1.jpg", "images/LC101-2.jpg"],
       desc: "Müzik Dinleyen Dino Anahtarlık - En sevilen ürünümüz! Eğlenceli tasarımı ve parlak renkleriyle çocuklar ve yetişkinler için mükemmel bir hediye.",
       vars: [
-        { name: "Küçük (7,5cm)", price: 100 },
-        { name: "Büyük (10cm)", price: 150 }
+        { name: "Küçük (7,5cm)", price: 125 },
+        { name: "Büyük (10cm)", price: 175 }
       ],
       category: "anahtarlik",
       rating: 4.8,
@@ -106,8 +106,8 @@ const ProductData = {
       imgs: ["images/LC105-1.jpg", "images/LC105-2.jpg"],
       desc: "Hareketli, oynar kollu sevimli Ahtapot. Farklı renk seçenekleri mevcuttur.",
       vars: [
-        { name: "Küçük (4cm)", price: 75 },
-        { name: "Büyük (7cm)", price: 125 },
+        { name: "Küçük (4cm)", price: 60 },
+        { name: "Büyük (7cm)", price: 100 },
       ],
       category: "anahtarlik",
       rating: 4.5,
@@ -117,7 +117,7 @@ const ProductData = {
     };
       products["LC106"] = {
       imgs: ["images/LC106-1.jpg", "images/LC106-2.jpg"],
-      desc: "En güçlü pokemon, sevimli oturan Piakchu. Bu tatlılık elektrik çarptıtır.",
+      desc: "En güçlü pokemon, sevimli ve şirin Pikachu. Bu tatlılık elektrik çarptıtır.:)",
       vars: [
         { name: "Küçük (4,5cm)", price: 75 },
         { name: "Büyük (7cm)", price: 125 },
@@ -128,18 +128,54 @@ const ProductData = {
       popular: true,
       new: false
     }; 
-
+      products["LC107"] = {
+      imgs: ["images/LC107-1.jpg", "images/LC107-2.jpg"],
+      desc: "I'm Groot.",
+      vars: [
+        { name: "Küçük (4,5cm)", price: 75 },
+        { name: "Büyük (7cm)", price: 125 },
+      ],
+      category: "anahtarlik",
+      rating: 4.8,
+      reviews: 102,
+      popular: true,
+      new: false
+    }; 
+      products["LC108"] = {
+      imgs: ["images/LC108-1.jpg", "images/LC108-2.jpg"],
+      desc: "Yalnız Penguen... Ama clickerlı.",
+      vars: [
+        { name: "Tek boy (5,5cm)", price: 125 },
+      ],
+      category: "anahtarlik",
+      rating: 4.7,
+      reviews: 62,
+      popular: true,
+      new: false
+    }; 
+      products["LC109"] = {
+      imgs: ["images/LC109-1.jpg", "images/LC109-2.jpg"],
+      desc: "Minik Civciv. Clickerlı.",
+      vars: [
+        { name: "Tek Boy (5,5cm)", price: 125 },
+      ],
+      category: "anahtarlik",
+      rating: 4.9,
+      reviews: 47,
+      popular: true,
+      new: false
+    }; 
+    
     // Çerçeveler (LC201-LC205)
     for (let i = 201; i <= 205; i++) {
       const code = `LC${i}`;
       products[code] = {
         imgs: [`images/${code}-1.jpg`, `images/${code}-2.jpg`],
-        desc: `Şık ve modern tasarımlı 3D baskı çerçeve. Duvarlarınızı süslemek için ideal.`,
+        desc: `Şık ve modern tasarımlı 3D baskı çerçeve. Güçlü magnetleri ile ister buzdolabınızı ister odanızı süslemek için ideal. Özelleştirilebilir, isim, tarih veya arzu ettiğiniz eklemeler yapılabilir.`,
         vars: [
-          { name: "Siyah (20x25cm)", price: 120 },
-          { name: "Beyaz (20x25cm)", price: 120 },
-          { name: "Siyah (30x40cm)", price: 180 },
-          { name: "Beyaz (30x40cm)", price: 180 }
+          { name: "Instax Mini", price: 250 },
+          { name: "Polaroid", price: 300 },
+
         ],
         category: "cerceve",
         rating: 4.3 + Math.random() * 0.5,
@@ -166,6 +202,177 @@ const ProductData = {
         new: i >= 320
       };
     }
+        // Featured products with custom data
+    products["LC301"] = {
+      imgs: ["images/LC301-1.jpg", "images/LC301-2.jpg"],
+      desc: "Samurai şeklinde Tütsülük. Farklı renk seçenekleri mevcuttur. Özelleştirilebilir.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+        products["LC302"] = {
+      imgs: ["images/LC302-1.jpg", "images/LC302-2.jpg"],
+      desc: "Kayıkçı şeklinde Tütsülük. Farklı renk seçenekleri mevcuttur. Özelleştirilebilir.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+    products["LC303"] = {
+      imgs: ["images/LC303-1.jpg", "images/LC303-2.jpg"],
+      desc: "ZEN Denge Kayalar şeklinde Tütsülük. Farklı renk seçenekleri mevcuttur. Özelleştirilebilir.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+
+        products["LC304"] = {
+      imgs: ["images/LC304-1.jpg", "images/LC304-2.jpg"],
+      desc: "Sevimli Panda şeklinde Tütsülük. Farklı renk seçenekleri mevcuttur. Özelleştirilebilir.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+    products["LC305"] = {
+      imgs: ["images/LC305-1.jpg", "images/LC305-2.jpg"],
+      desc: "Modern ve şık tasarım kalem veya aksesuar kutusu. Farklı renk seçenekleri mevcuttur. Özelleştirilebilir.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+    products["LC306"] = {
+      imgs: ["images/LC306-1.jpg", "images/LC306-2.jpg"],
+      desc: "Nike şişme mont şeklinde kalem kutusu. Farklı renk seçenekleri mevcuttur. Özelleştirilebilir.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+    products["LC307"] = {
+      imgs: ["images/LC307-1.jpg", "images/LC307-2.jpg"],
+      desc: "Kırmızı Gül",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+    products["LC308"] = {
+      imgs: ["images/LC308-1.jpg", "images/LC308-2.jpg"],
+      desc: "Modern ve şık saksı. Evinize güzel bir dokunuş katacaktır. Farklı renk seçenekleri mevcuttur.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+    products["LC309"] = {
+      imgs: ["images/LC309-1.jpg", "images/LC309-2.jpg"],
+      desc: "Modern ve şık saksı. Evinize güzel bir dokunuş katacaktır. Farklı renk seçenekleri mevcuttur.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+        products["LC310"] = {
+      imgs: ["images/LC310-1.jpg", "images/LC310-2.jpg"],
+      desc: "Modern ve şık saksı. Evinize güzel bir dokunuş katacaktır. Farklı renk seçenekleri mevcuttur.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+        products["LC311"] = {
+      imgs: ["images/LC311-1.jpg", "images/LC311-2.jpg"],
+      desc: "Gülümseyen saksı. Odanıza tatlı bir dokunuş katacaktır. Farklı renk seçenekleri mevcuttur.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+        products["LC312"] = {
+      imgs: ["images/LC312-1.jpg", "images/LC312-2.jpg"],
+      desc: "Gülümseyen saksı. Odanıza tatlı bir dokunuş katacaktır. Farklı renk seçenekleri mevcuttur.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+            products["LC313"] = {
+      imgs: ["images/LC313-1.jpg", "images/LC313-2.jpg"],
+      desc: "Gülümseyen kalp gözlü saksı. Odanıza tatlı bir dokunuş katacaktır. Farklı renk seçenekleri mevcuttur.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+            products["LC314"] = {
+      imgs: ["images/LC314-1.jpg", "images/LC314-2.jpg"],
+      desc: "Modern ve şık saksı. Evinize güzel bir dokunuş katacaktır. Farklı renk seçenekleri mevcuttur.",
+      vars: [
+        { name: "Tek Boy", price: 250 },
+      ],
+      category: "ev",
+      rating: 4.8,
+      reviews: 127,
+      popular: true,
+      new: false
+    };
+    
     
     return products;
   }
@@ -1252,5 +1459,6 @@ if (document.readyState === 'loading') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { App, AppState, products };
 }
+
 
 
