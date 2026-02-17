@@ -32,7 +32,7 @@ const ProductData = {
     const products = {};
     
     // Anahtarlıklar (LC101-LC109)
-    for (let i = 101; i <= 109; i++) {
+    for (let i = 101; i <= 111; i++) {
       const code = `LC${i}`;
       products[code] = {
         imgs: [`images/${code}-1.jpg`, `images/${code}-2.jpg`],
@@ -54,11 +54,11 @@ const ProductData = {
       imgs: ["images/LC101-1.jpg", "images/LC101-2.jpg"],
       desc: "Müzik Dinleyen Dino Anahtarlık - En sevilen ürünümüz! Eğlenceli tasarımı ve parlak renkleriyle çocuklar ve yetişkinler için mükemmel bir hediye.",
       vars: [
-        { name: "Küçük (8cm)", price: 100 },
-        { name: "Büyük (15cm)", price: 150 }
+        { name: "Küçük (7,5cm)", price: 100 },
+        { name: "Büyük (10cm)", price: 150 }
       ],
       category: "anahtarlik",
-      rating: 4.9,
+      rating: 4.8,
       reviews: 127,
       popular: true,
       new: false
@@ -66,10 +66,9 @@ const ProductData = {
     
     products["LC102"] = {
       imgs: ["images/LC102-1.jpg", "images/LC102-2.jpg"],
-      desc: "Minecraft Kalpli Clicker Anahtarlık - Minecraft Hayranları için özel tasarım. Detaylı ve yüksek baskı kalitesi.",
+      desc: "Minecraft Kalpli Clicker Anahtarlık - Minecraft Hayranları için özel tasarım. Yüksek baskı kalitesi ve clicker sesi.",
       vars: [
-        { name: "Küçük (8cm)", price: 50 },
-        { name: "Büyük (15cm)", price: 75 }
+        { name: "Tek Boy (5cm)", price: 100 },
       ],
       category: "anahtarlik",
       rating: 4.7,
@@ -80,10 +79,9 @@ const ProductData = {
 
  products["LC103"] = {
       imgs: ["images/LC103-1.jpg", "images/LC103-2.jpg"],
-      desc: "Kalpli Avokado Clicker Anahtarlık - Avokado sevenler için şirin ve özel tasarım. Detaylı ve yüksek baskı kalitesi.",
+      desc: "Kalpli Avokado Clicker Anahtarlık - Avokado sevenler için şirin ve özel tasarım. Yüksek baskı kalitesi ve clicker sesi.",
       vars: [
-        { name: "Küçük (8cm)", price: 50 },
-        { name: "Büyük (15cm)", price: 75 }
+        { name: "Tek Boy (5,5cm)", price: 100 },
       ],
       category: "anahtarlik",
       rating: 4.9,
@@ -91,6 +89,45 @@ const ProductData = {
       popular: true,
       new: false
     };    
+     products["LC104"] = {
+      imgs: ["images/LC104-1.jpg", "images/LC104-2.jpg"],
+      desc: "Tatlı ve sevimli minyon anahtarlık.",
+      vars: [
+        { name: "Küçük (4cm)", price: 75 },
+        { name: "Büyük (7cm)", price: 125 },
+      ],
+      category: "anahtarlik",
+      rating: 4.4,
+      reviews: 53,
+      popular: true,
+      new: false
+    };    
+      products["LC105"] = {
+      imgs: ["images/LC105-1.jpg", "images/LC105-2.jpg"],
+      desc: "Hareketli, oynar kollu sevimli Ahtapot. Farklı renk seçenekleri mevcuttur.",
+      vars: [
+        { name: "Küçük (4cm)", price: 75 },
+        { name: "Büyük (7cm)", price: 125 },
+      ],
+      category: "anahtarlik",
+      rating: 4.5,
+      reviews: 22,
+      popular: true,
+      new: false
+    };
+      products["LC106"] = {
+      imgs: ["images/LC106-1.jpg", "images/LC106-2.jpg"],
+      desc: "En güçlü pokemon, sevimli oturan Piakchu. Bu tatlılık elektrik çarptıtır.",
+      vars: [
+        { name: "Küçük (4,5cm)", price: 75 },
+        { name: "Büyük (7cm)", price: 125 },
+      ],
+      category: "anahtarlik",
+      rating: 4.9,
+      reviews: 122,
+      popular: true,
+      new: false
+    }; 
 
     // Çerçeveler (LC201-LC205)
     for (let i = 201; i <= 205; i++) {
@@ -1215,4 +1252,5 @@ if (document.readyState === 'loading') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { App, AppState, products };
 }
+
 
