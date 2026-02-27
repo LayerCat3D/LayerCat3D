@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -180,7 +181,7 @@
 
     <!-- ANAHTARLIKLAR -->
     <section id="cat-anahtarlik" class="category" aria-labelledby="keys-heading">
-      <h2 id="keys-heading">Anahtarlıklar</h2>
+      <h2 id="keys-heading" class="category-heading" data-category="anahtarlik" data-grid="keysGrid" tabindex="0" role="button" aria-expanded="false" title="Tıklayın: tüm ürünleri listele / yatay kaydır">Anahtarlıklar <span class="category-toggle-icon">⊞</span></h2>
       <div class="scroll-container">
         <button 
           class="scroll-btn left" 
@@ -203,7 +204,7 @@
 
     <!-- ÇERÇEVELER -->
     <section id="cat-cerceve" class="category" aria-labelledby="frames-heading">
-      <h2 id="frames-heading">Çerçeveler</h2>
+      <h2 id="frames-heading" class="category-heading" data-category="cerceve" data-grid="framesGrid" tabindex="0" role="button" aria-expanded="false" title="Tıklayın: tüm ürünleri listele / yatay kaydır">Çerçeveler <span class="category-toggle-icon">⊞</span></h2>
       <div class="scroll-container">
         <button 
           class="scroll-btn left" 
@@ -226,7 +227,7 @@
 
     <!-- EV-DEKORASYON -->
     <section id="cat-ev" class="category" aria-labelledby="decor-heading">
-      <h2 id="decor-heading">Ev-Dekorasyon</h2>
+      <h2 id="decor-heading" class="category-heading" data-category="ev" data-grid="decorGrid" tabindex="0" role="button" aria-expanded="false" title="Tıklayın: tüm ürünleri listele / yatay kaydır">Ev-Dekorasyon <span class="category-toggle-icon">⊞</span></h2>
       <div class="scroll-container">
         <button 
           class="scroll-btn left" 
@@ -369,6 +370,80 @@
   <!-- Loading indicator -->
   <div id="loadingIndicator" class="loading" style="display: none;" aria-live="polite">
     <span>Yükleniyor...</span>
+  </div>
+
+  <!-- BACK TO TOP BUTTON -->
+  <button id="backToTop" class="back-to-top" aria-label="Yukarı çık" style="display:none;">▲</button>
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" class="admin-panel" style="display:none;" role="dialog" aria-modal="true" aria-label="Admin Paneli">
+    <div class="admin-content">
+      <div class="admin-header">
+        <h2>📊 Admin Paneli</h2>
+        <button id="closeAdmin" aria-label="Kapat">✕</button>
+      </div>
+      <div class="admin-body">
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">👁️</div>
+            <div class="admin-stat-value" id="adminTotalVisits">0</div>
+            <div class="admin-stat-label">Toplam Ziyaret</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">📅</div>
+            <div class="admin-stat-value" id="adminTodayVisits">0</div>
+            <div class="admin-stat-label">Bugün</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">🛒</div>
+            <div class="admin-stat-value" id="adminCartOpens">0</div>
+            <div class="admin-stat-label">Sepet Açılmaları</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">🔍</div>
+            <div class="admin-stat-value" id="adminProductViews">0</div>
+            <div class="admin-stat-label">Ürün Görüntüleme</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">❤️</div>
+            <div class="admin-stat-value" id="adminFavAdds">0</div>
+            <div class="admin-stat-label">Favoriye Ekleme</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">📱</div>
+            <div class="admin-stat-value" id="adminWhatsappClicks">0</div>
+            <div class="admin-stat-label">WhatsApp Tıklama</div>
+          </div>
+        </div>
+
+        <div class="admin-section">
+          <h3>📦 En Çok Görüntülenen Ürünler</h3>
+          <div id="adminTopProducts" class="admin-top-list"></div>
+        </div>
+
+        <div class="admin-section">
+          <h3>🕒 Son Ziyaretler</h3>
+          <div id="adminRecentVisits" class="admin-visits-list"></div>
+        </div>
+
+        <div class="admin-section admin-actions">
+          <button id="adminClearData" class="admin-danger-btn">🗑️ İstatistikleri Sıfırla</button>
+          <button id="adminExport" class="admin-export-btn">📥 Dışa Aktar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Admin trigger (gizli - logo'ya 5x tıklayınca açılır) -->
+  <div id="adminLoginModal" class="admin-login-modal" style="display:none;">
+    <div class="admin-login-content">
+      <h3>🔐 Admin Girişi</h3>
+      <input type="password" id="adminPasswordInput" placeholder="Şifre giriniz..." autocomplete="off">
+      <div class="admin-login-buttons">
+        <button id="adminLoginBtn">Giriş</button>
+        <button id="adminLoginCancel">İptal</button>
+      </div>
+      <p id="adminLoginError" style="color:var(--error);display:none;">Hatalı şifre!</p>
+    </div>
   </div>
 
   <script src="script.js"></script>
