@@ -1420,22 +1420,19 @@ const ScrollControls = {
 };
 
 // ============================================
-// LOGO CLICK HANDLER
+// LOGO CLICK HANDLER - AdminPanel ile birleşik
 // ============================================
 const LogoHandler = {
   init() {
     const logo = document.querySelector('.logo');
     if (logo) {
-      logo.addEventListener('click', () => {
-        location.reload();
-      });
-      
       logo.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           location.reload();
         }
       });
+      // Not: click olayı AdminPanel.init() tarafından yönetiliyor
     }
   }
 };
@@ -1480,6 +1477,8 @@ if (typeof module !== 'undefined' && module.exports) {
 // CATEGORY EXPAND - Başlığa tıklayınca grid
 // ============================================
 const CategoryExpand = {
+  activeCategory: null, // şu an açık olan kategori
+
   init() {
     document.querySelectorAll('.category-heading').forEach(heading => {
       heading.addEventListener('click', () => this.toggle(heading));
@@ -1493,31 +1492,74 @@ const CategoryExpand = {
   },
 
   toggle(heading) {
-    const gridId = heading.dataset.grid;
-    const grid = document.getElementById(gridId);
-    if (!grid) return;
-
+    const category = heading.dataset.category;
     const isExpanded = heading.getAttribute('aria-expanded') === 'true';
 
     if (isExpanded) {
-      // Yatay moda geri dön
-      grid.classList.remove('grid-mode');
-      heading.setAttribute('aria-expanded', 'false');
-      // Scroll butonlarını göster
-      const section = heading.closest('.category');
-      if (section) {
-        section.querySelectorAll('.scroll-btn, .scroll-hint').forEach(el => el.style.display = '');
-      }
+      // Kapat — tüm kategorileri normale döndür
+      this.collapseAll();
     } else {
-      // Grid moduna geç
-      grid.classList.add('grid-mode');
-      heading.setAttribute('aria-expanded', 'true');
-      // Scroll butonlarını gizle
-      const section = heading.closest('.category');
-      if (section) {
-        section.querySelectorAll('.scroll-btn, .scroll-hint').forEach(el => el.style.display = 'none');
+      // Önce hepsini kapat, sonra bunu aç
+      this.collapseAll();
+      this.expand(heading, category);
+    }
+  },
+
+  expand(heading, category) {
+    this.activeCategory = category;
+    heading.setAttribute('aria-expanded', 'true');
+
+    // Diğer category section'larını gizle (testimonials hariç)
+    document.querySelectorAll('.category').forEach(section => {
+      const sectionHeading = section.querySelector('.category-heading');
+      if (sectionHeading && sectionHeading.dataset.category !== category) {
+        section.style.display = 'none';
+      }
+    });
+
+    // Bu kategorinin grid'ini liste moduna geçir
+    const section = heading.closest('.category');
+    if (section) {
+      const gridId = heading.dataset.grid;
+      const grid = document.getElementById(gridId);
+      if (grid) grid.classList.add('grid-mode');
+      section.querySelectorAll('.scroll-btn, .scroll-hint').forEach(el => el.style.display = 'none');
+
+      // Başlığın yanına "← Geri" butonu ekle (yoksa)
+      if (!section.querySelector('.category-back-btn')) {
+        const backBtn = document.createElement('button');
+        backBtn.className = 'category-back-btn';
+        backBtn.textContent = '← Tüm kategoriler';
+        backBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.collapseAll();
+        });
+        heading.insertAdjacentElement('afterend', backBtn);
       }
     }
+  },
+
+  collapseAll() {
+    this.activeCategory = null;
+
+    // Tüm kategorileri tekrar göster
+    document.querySelectorAll('.category').forEach(section => {
+      section.style.display = '';
+      const gridId = section.querySelector('.category-heading')?.dataset.grid;
+      if (gridId) {
+        const grid = document.getElementById(gridId);
+        if (grid) grid.classList.remove('grid-mode');
+      }
+      section.querySelectorAll('.scroll-btn, .scroll-hint').forEach(el => el.style.display = '');
+      // "Geri" butonunu kaldır
+      const backBtn = section.querySelector('.category-back-btn');
+      if (backBtn) backBtn.remove();
+    });
+
+    // Tüm başlıkları kapat
+    document.querySelectorAll('.category-heading').forEach(h => {
+      h.setAttribute('aria-expanded', 'false');
+    });
   }
 };
 
@@ -1638,18 +1680,27 @@ const AdminPanel = {
   logoClickTimer: null,
 
   init() {
-    // Logo'ya 5x hızlı tıklayınca login aç
+    // Logo'ya 5x hızlı tıklayınca login aç, aksi halde normal reload
     const logo = document.querySelector('.logo');
     if (logo) {
       logo.addEventListener('click', (e) => {
         this.logoClickCount++;
         clearTimeout(this.logoClickTimer);
-        this.logoClickTimer = setTimeout(() => { this.logoClickCount = 0; }, 2000);
+
         if (this.logoClickCount >= 5) {
           this.logoClickCount = 0;
-          e.stopPropagation();
           this.showLogin();
+          return; // reload yapma
         }
+
+        // 600ms içinde 5. tık gelmezse reload yap
+        this.logoClickTimer = setTimeout(() => {
+          if (this.logoClickCount > 0 && this.logoClickCount < 5) {
+            this.logoClickCount = 0;
+            location.reload();
+          }
+          this.logoClickCount = 0;
+        }, 600);
       });
     }
 
