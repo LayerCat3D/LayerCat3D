@@ -751,6 +751,7 @@ const FavoritesManager = {
     this.save();
     this.updateCount();
     this.updateFavoriteButtons();
+    if (typeof Analytics !== 'undefined') Analytics.recordFavAdd();
   },
   
   remove(productCode) {
@@ -963,6 +964,7 @@ const ProductModal = {
     
     // Show modal
     Utils.toggleClass('productModal', 'open', true);
+    if (typeof Analytics !== 'undefined') Analytics.recordProductView(productCode);
     
     const closeBtn = Utils.getElement('closeModal');
     if (closeBtn) {
@@ -1130,6 +1132,15 @@ const CartManager = {
   
   open() {
     Utils.toggleClass('cartDrawer', 'open', true);
+    if (typeof Analytics !== 'undefined') Analytics.recordCartOpen();
+    // Cart count pop animasyonu
+    const cartCount = document.getElementById('cartCount');
+    if (cartCount) {
+      cartCount.classList.remove('pop');
+      void cartCount.offsetWidth;
+      cartCount.classList.add('pop');
+      setTimeout(() => cartCount.classList.remove('pop'), 400);
+    }
   },
   
   close() {
@@ -1243,6 +1254,7 @@ const CartManager = {
     message += `%0ATeşekkürler! 🐱`;
     
     const phoneNumber = '905439287380';
+    if (typeof Analytics !== 'undefined') Analytics.recordWhatsapp();
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
   }
 };
@@ -1442,6 +1454,10 @@ const App = {
     ProductRenderer.init();
     ScrollControls.init();
     LogoHandler.init();
+    CategoryExpand.init();
+    BackToTop.init();
+    AdminPanel.init();
+    Analytics.recordVisit();
     
     console.log('LayerCat3D Enhanced initialized successfully');
     console.log(`Loaded ${Object.keys(products).length} products`);
@@ -1460,5 +1476,319 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = { App, AppState, products };
 }
 
+// ============================================
+// CATEGORY EXPAND - Başlığa tıklayınca grid
+// ============================================
+const CategoryExpand = {
+  init() {
+    document.querySelectorAll('.category-heading').forEach(heading => {
+      heading.addEventListener('click', () => this.toggle(heading));
+      heading.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.toggle(heading);
+        }
+      });
+    });
+  },
+
+  toggle(heading) {
+    const gridId = heading.dataset.grid;
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+
+    const isExpanded = heading.getAttribute('aria-expanded') === 'true';
+
+    if (isExpanded) {
+      // Yatay moda geri dön
+      grid.classList.remove('grid-mode');
+      heading.setAttribute('aria-expanded', 'false');
+      // Scroll butonlarını göster
+      const section = heading.closest('.category');
+      if (section) {
+        section.querySelectorAll('.scroll-btn, .scroll-hint').forEach(el => el.style.display = '');
+      }
+    } else {
+      // Grid moduna geç
+      grid.classList.add('grid-mode');
+      heading.setAttribute('aria-expanded', 'true');
+      // Scroll butonlarını gizle
+      const section = heading.closest('.category');
+      if (section) {
+        section.querySelectorAll('.scroll-btn, .scroll-hint').forEach(el => el.style.display = 'none');
+      }
+    }
+  }
+};
+
+// ============================================
+// BACK TO TOP
+// ============================================
+const BackToTop = {
+  init() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
+
+    window.addEventListener('scroll', () => {
+      btn.style.display = window.scrollY > 400 ? 'flex' : 'none';
+    });
+
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+};
+
+// ============================================
+// ANALYTICS - Trafik takibi
+// ============================================
+const Analytics = {
+  ADMIN_PASSWORD: 'layercat2024', // Şifreyi buradan değiştirebilirsiniz
+
+  _get(key, def = null) {
+    try {
+      const v = localStorage.getItem('lc3d_analytics_' + key);
+      return v ? JSON.parse(v) : def;
+    } catch { return def; }
+  },
+
+  _set(key, val) {
+    try {
+      localStorage.setItem('lc3d_analytics_' + key, JSON.stringify(val));
+    } catch {}
+  },
+
+  _inc(key) {
+    this._set(key, (this._get(key, 0)) + 1);
+  },
+
+  recordVisit() {
+    this._inc('total_visits');
+
+    // Bugünün tarihi
+    const today = new Date().toLocaleDateString('tr-TR');
+    const days = this._get('daily_visits', {});
+    days[today] = (days[today] || 0) + 1;
+    this._set('daily_visits', days);
+
+    // Son 20 ziyaret
+    const visits = this._get('recent_visits', []);
+    visits.unshift({
+      time: new Date().toLocaleString('tr-TR'),
+      page: document.title
+    });
+    this._set('recent_visits', visits.slice(0, 20));
+  },
+
+  recordCartOpen() { this._inc('cart_opens'); },
+  recordProductView(code) {
+    this._inc('product_views');
+    const views = this._get('product_view_counts', {});
+    views[code] = (views[code] || 0) + 1;
+    this._set('product_view_counts', views);
+  },
+  recordFavAdd() { this._inc('fav_adds'); },
+  recordWhatsapp() { this._inc('whatsapp_clicks'); },
+
+  getAll() {
+    const today = new Date().toLocaleDateString('tr-TR');
+    const days = this._get('daily_visits', {});
+    const productViews = this._get('product_view_counts', {});
+    const topProducts = Object.entries(productViews)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8);
+
+    return {
+      totalVisits: this._get('total_visits', 0),
+      todayVisits: days[today] || 0,
+      cartOpens: this._get('cart_opens', 0),
+      productViews: this._get('product_views', 0),
+      favAdds: this._get('fav_adds', 0),
+      whatsappClicks: this._get('whatsapp_clicks', 0),
+      topProducts,
+      recentVisits: this._get('recent_visits', [])
+    };
+  },
+
+  clearAll() {
+    ['total_visits','daily_visits','recent_visits','cart_opens','product_views',
+     'product_view_counts','fav_adds','whatsapp_clicks'].forEach(k => {
+      localStorage.removeItem('lc3d_analytics_' + k);
+    });
+  },
+
+  export() {
+    const data = this.getAll();
+    const text = JSON.stringify(data, null, 2);
+    const blob = new Blob([text], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `layercat3d_analytics_${new Date().toLocaleDateString('tr-TR').replace(/\./g,'-')}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+};
+
+// ============================================
+// ADMIN PANEL
+// ============================================
+const AdminPanel = {
+  logoClickCount: 0,
+  logoClickTimer: null,
+
+  init() {
+    // Logo'ya 5x hızlı tıklayınca login aç
+    const logo = document.querySelector('.logo');
+    if (logo) {
+      logo.addEventListener('click', (e) => {
+        this.logoClickCount++;
+        clearTimeout(this.logoClickTimer);
+        this.logoClickTimer = setTimeout(() => { this.logoClickCount = 0; }, 2000);
+        if (this.logoClickCount >= 5) {
+          this.logoClickCount = 0;
+          e.stopPropagation();
+          this.showLogin();
+        }
+      });
+    }
+
+    // Login
+    const loginBtn = document.getElementById('adminLoginBtn');
+    const loginCancel = document.getElementById('adminLoginCancel');
+    const pwInput = document.getElementById('adminPasswordInput');
+
+    if (loginBtn) {
+      loginBtn.addEventListener('click', () => this.tryLogin());
+    }
+    if (loginCancel) {
+      loginCancel.addEventListener('click', () => this.hideLogin());
+    }
+    if (pwInput) {
+      pwInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') this.tryLogin();
+        if (e.key === 'Escape') this.hideLogin();
+      });
+    }
+
+    // Close admin
+    const closeAdmin = document.getElementById('closeAdmin');
+    if (closeAdmin) closeAdmin.addEventListener('click', () => this.close());
+
+    const adminPanel = document.getElementById('adminPanel');
+    if (adminPanel) {
+      adminPanel.addEventListener('click', (e) => {
+        if (e.target === adminPanel) this.close();
+      });
+    }
+
+    // Clear & Export
+    const clearBtn = document.getElementById('adminClearData');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (confirm('Tüm istatistikler silinecek. Emin misiniz?')) {
+          Analytics.clearAll();
+          this.renderStats();
+        }
+      });
+    }
+
+    const exportBtn = document.getElementById('adminExport');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => Analytics.export());
+    }
+  },
+
+  showLogin() {
+    const modal = document.getElementById('adminLoginModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      const input = document.getElementById('adminPasswordInput');
+      if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 100);
+      }
+      const err = document.getElementById('adminLoginError');
+      if (err) err.style.display = 'none';
+    }
+  },
+
+  hideLogin() {
+    const modal = document.getElementById('adminLoginModal');
+    if (modal) modal.style.display = 'none';
+  },
+
+  tryLogin() {
+    const input = document.getElementById('adminPasswordInput');
+    const err = document.getElementById('adminLoginError');
+    if (input && input.value === Analytics.ADMIN_PASSWORD) {
+      this.hideLogin();
+      this.open();
+    } else {
+      if (err) err.style.display = 'block';
+      if (input) { input.value = ''; input.focus(); }
+    }
+  },
+
+  open() {
+    const panel = document.getElementById('adminPanel');
+    if (panel) {
+      panel.style.display = 'flex';
+      this.renderStats();
+    }
+  },
+
+  close() {
+    const panel = document.getElementById('adminPanel');
+    if (panel) panel.style.display = 'none';
+  },
+
+  renderStats() {
+    const data = Analytics.getAll();
+
+    const setText = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setText('adminTotalVisits', data.totalVisits);
+    setText('adminTodayVisits', data.todayVisits);
+    setText('adminCartOpens', data.cartOpens);
+    setText('adminProductViews', data.productViews);
+    setText('adminFavAdds', data.favAdds);
+    setText('adminWhatsappClicks', data.whatsappClicks);
+
+    // Top products
+    const topList = document.getElementById('adminTopProducts');
+    if (topList) {
+      if (data.topProducts.length === 0) {
+        topList.innerHTML = '<p style="color:var(--text-secondary);font-size:14px;">Henüz ürün görüntülemesi yok.</p>';
+      } else {
+        topList.innerHTML = data.topProducts.map(([code, count], i) => `
+          <div class="admin-top-item">
+            <span class="admin-top-item-rank">#${i+1}</span>
+            <span class="admin-top-item-name">${code}</span>
+            <span class="admin-top-item-count">${count} görüntüleme</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Recent visits
+    const visitsList = document.getElementById('adminRecentVisits');
+    if (visitsList) {
+      if (data.recentVisits.length === 0) {
+        visitsList.innerHTML = '<p style="color:var(--text-secondary);font-size:14px;">Henüz ziyaret kaydı yok.</p>';
+      } else {
+        visitsList.innerHTML = data.recentVisits.map(v => `
+          <div class="admin-visit-item">
+            <span>${v.time}</span>
+            <span>Sayfa görüntülendi</span>
+          </div>
+        `).join('');
+      }
+    }
+  }
+};
 
 
